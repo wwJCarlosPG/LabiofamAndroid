@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Labiofam-android</string>
+    <string name="google_map_api_key">AIzaSyA0FoPwKxx8NXAElQQrw9CNBN59cQiBI2U</string>
 </resources>

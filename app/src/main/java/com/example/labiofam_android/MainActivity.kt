@@ -1,23 +1,25 @@
 package com.example.labiofam_android
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
-    private var mGoogleMap:GoogleMap?=null
+class MainActivity : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment)
-                as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        val btnOpenActivity = findViewById<Button>(R.id.pv_btn)
+        btnOpenActivity.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        mGoogleMap = googleMap
-    }
+
 }

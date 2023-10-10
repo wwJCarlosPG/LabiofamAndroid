@@ -17,5 +17,13 @@
         app:layout_constraintStart_toStartOf="parent">
     </androidx.fragment.app.FragmentContainerView>
 
+    <TextView
+        android:id="@+id/pointInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textStyle="italic">
+
+    </TextView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

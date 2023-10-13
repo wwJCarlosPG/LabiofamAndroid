@@ -18,6 +18,11 @@ class MainActivity : AppCompatActivity()  {
             val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
         }
+        val btnOpenActivity2 = findViewById<Button>(R.id.services_btn)
+        btnOpenActivity2.setOnClickListener {
+            val intent = Intent(this, ServicesActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 

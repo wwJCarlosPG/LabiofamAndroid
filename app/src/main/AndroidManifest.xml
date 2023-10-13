@@ -16,12 +16,6 @@
             android:name=".ServicesActivity"
             android:exported="false" />
         <activity
-            android:name=".ByProductsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ContactsViewActivity"
-            android:exported="false" />
-        <activity
             android:name=".MapActivity"
             android:exported="false" />
 

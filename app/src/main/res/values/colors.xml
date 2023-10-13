@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="background_contacts">#E8DFC4</color>
+    <color name="text">#474645</color>
+    <color name="cardViewBackground">#EFCF6D</color>
+    <color name="contactPhone">#0AB811</color>
+
 </resources>

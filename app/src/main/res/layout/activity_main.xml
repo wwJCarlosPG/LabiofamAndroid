@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="16dp"
     tools:context=".MainActivity">
 
 
@@ -16,11 +18,7 @@
         android:onClick="openPV"
         android:text="Puntos de Venta"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints,UnknownId" />
-
-    <Button
+  <Button
         android:id="@+id/services_btn"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"

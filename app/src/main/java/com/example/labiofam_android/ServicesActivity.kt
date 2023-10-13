@@ -2,6 +2,7 @@ package com.example.labiofam_android
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -15,6 +16,7 @@ import okhttp3.Request
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import kotlin.math.min
+
 
 class ServicesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Labiofam-android</string>
     <string name="google_map_api_key">AIzaSyA0FoPwKxx8NXAElQQrw9CNBN59cQiBI2U</string>
+    <string name="contacts_btn">Contactos</string>
+    <string name="byProducts_btn_text">Subproductos</string>
+    <string name="services_btn_text">Servicios</string>
+    <string name="categories_text">Categorías</string>
+    <string name="name_text">Nombre</string>
+    <string name="age_text">Edad</string>
+    <string name="position">Cargo</string>
 </resources>

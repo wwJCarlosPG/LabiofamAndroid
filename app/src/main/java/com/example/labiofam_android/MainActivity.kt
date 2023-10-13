@@ -24,7 +24,28 @@ class MainActivity : AppCompatActivity()  {
             startActivity(intent)
         }
 
+        val btnOpenContactsActivity = findViewById<Button>(R.id.contacts_btn)
+        val btnOpenByproductsActivity = findViewById<Button>(R.id.byProducts_btn)
+        val btnOpenServicesActivity = findViewById<Button>(R.id.services_btn)
+
+        btnOpenContactsActivity.setOnClickListener { navigateToContactsActivity() }
+        btnOpenByproductsActivity.setOnClickListener { navigateToByproductsActivity() }
+        btnOpenServicesActivity.setOnClickListener { navigateToServicesActivity() }
+    }
+
+    private fun navigateToServicesActivity() {
+        val intent = Intent(this, ServicesActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun navigateToByproductsActivity() {
+        val intent = Intent(this, ByProductsActivity::class.java)
+        startActivity(intent)
     }
 
 
+    private fun navigateToContactsActivity(){
+        val intent = Intent(this, ContactsViewActivity::class.java)
+        startActivity(intent)
+    }
 }

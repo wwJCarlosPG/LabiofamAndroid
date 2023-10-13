@@ -9,16 +9,29 @@
 
     <Button
         android:id="@+id/pv_btn"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="168dp"
-        android:text="Puntos de Venta"
+        android:layout_marginEnd="32dp"
         android:onClick="openPV"
+        android:text="Puntos de Venta"
         android:textColor="@color/black"
-        style="?android:attr/borderlessButtonStyle"
-        app:layout_constraintEnd_toStartOf="@+id/appCompatTextView"
-        tools:layout_editor_absoluteY="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints,UnknownId" />
+
+    <Button
+        android:id="@+id/services_btn"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="openServices"
+        android:text="Servicios"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/pv_btn"
+        app:layout_constraintHorizontal_bias="0.225"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

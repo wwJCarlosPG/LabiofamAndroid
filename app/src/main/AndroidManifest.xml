@@ -13,12 +13,21 @@
         android:theme="@style/Theme.Labiofamandroid"
         tools:targetApi="31">
         <activity
+            android:name=".ServicesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ByProductsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContactsViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".MapActivity"
             android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_map_api_key"></meta-data>
+            android:value="@string/google_map_api_key" />
 
         <activity
             android:name=".MainActivity"

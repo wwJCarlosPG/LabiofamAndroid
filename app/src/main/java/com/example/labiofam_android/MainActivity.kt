@@ -3,6 +3,7 @@ package com.example.labiofam_android
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -25,12 +26,8 @@ class MainActivity : AppCompatActivity()  {
         }
 
         val btnOpenContactsActivity = findViewById<Button>(R.id.contacts_btn)
-        val btnOpenByproductsActivity = findViewById<Button>(R.id.byProducts_btn)
-        val btnOpenServicesActivity = findViewById<Button>(R.id.services_btn)
 
         btnOpenContactsActivity.setOnClickListener { navigateToContactsActivity() }
-        btnOpenByproductsActivity.setOnClickListener { navigateToByproductsActivity() }
-        btnOpenServicesActivity.setOnClickListener { navigateToServicesActivity() }
     }
 
     private fun navigateToServicesActivity() {
@@ -38,14 +35,13 @@ class MainActivity : AppCompatActivity()  {
         startActivity(intent)
     }
 
-    private fun navigateToByproductsActivity() {
-        val intent = Intent(this, ByProductsActivity::class.java)
-        startActivity(intent)
-    }
+
 
 
     private fun navigateToContactsActivity(){
         val intent = Intent(this, ContactsViewActivity::class.java)
         startActivity(intent)
     }
+
+    fun openServices(view: View) {}
 }

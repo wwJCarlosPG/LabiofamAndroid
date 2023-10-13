@@ -8,4 +8,5 @@
     <string name="name_text">Nombre</string>
     <string name="age_text">Edad</string>
     <string name="position">Cargo</string>
+    <string name="services_text">Servicios</string>
 </resources>

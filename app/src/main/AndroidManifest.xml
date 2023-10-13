@@ -18,6 +18,10 @@
         <activity
             android:name=".MapActivity"
             android:exported="false" />
+        <activity
+            android:name=".ContactsViewActivity"
+            android:exported="false" />
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

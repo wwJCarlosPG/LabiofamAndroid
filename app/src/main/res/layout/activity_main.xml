@@ -12,24 +12,45 @@
     <Button
         android:id="@+id/pv_btn"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
         android:onClick="openPV"
         android:text="Puntos de Venta"
         android:textColor="@color/black"
-  <Button
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="119dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
         android:id="@+id/services_btn"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="openServices"
-        android:text="Servicios"
+        android:layout_marginTop="44dp"
+        android:onClick="zopenServices"
+        android:text="@string/services_text"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/pv_btn"
-        app:layout_constraintHorizontal_bias="0.225"
+        app:layout_constraintHorizontal_bias="0.181"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></Button>
+        app:layout_constraintTop_toTopOf="parent">
+
+    </Button>
+
+    <Button
+        android:id="@+id/contacts_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/contacts_btn"
+        android:textColor="@color/black"
+        style="?android:attr/borderlessButtonStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pv_btn"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        tools:layout_editor_absoluteY="16dp">
+    </Button>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

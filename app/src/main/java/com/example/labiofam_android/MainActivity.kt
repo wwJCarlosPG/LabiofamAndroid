@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import com.example.labiofam_android.databinding.ActivityMainBinding
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -12,6 +13,7 @@ import com.google.android.gms.maps.SupportMapFragment
 class MainActivity : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ContactsProvider.contactsList
         setContentView(R.layout.activity_main)
 
         val btnOpenActivity = findViewById<Button>(R.id.pv_btn)

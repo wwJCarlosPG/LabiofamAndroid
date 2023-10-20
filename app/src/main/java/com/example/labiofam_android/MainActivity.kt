@@ -26,8 +26,15 @@ class MainActivity : AppCompatActivity()  {
         }
 
         val btnOpenContactsActivity = findViewById<Button>(R.id.contacts_btn)
+        val btnOpenBioproductsActivity = findViewById<Button>(R.id.bioproducts_btn)
 
+        btnOpenBioproductsActivity.setOnClickListener { navigateToBioproductsActivity() }
         btnOpenContactsActivity.setOnClickListener { navigateToContactsActivity() }
+    }
+
+    private fun navigateToBioproductsActivity() {
+        val intent = Intent(this, BioproductsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun navigateToServicesActivity() {

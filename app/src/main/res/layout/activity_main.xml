@@ -17,7 +17,8 @@
         android:onClick="openPV"
         android:text="Puntos de Venta"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/services_btn"
         tools:layout_editor_absoluteY="119dp"
         tools:ignore="MissingConstraints" />
 
@@ -31,7 +32,6 @@
         android:text="@string/services_text"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/pv_btn"
-        app:layout_constraintHorizontal_bias="0.181"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -46,6 +46,20 @@
         style="?android:attr/borderlessButtonStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pv_btn"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        tools:layout_editor_absoluteY="16dp">
+    </Button>
+
+    <Button
+        android:id="@+id/bioproducts_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bioproducts_text"
+        android:textColor="@color/black"
+        style="?android:attr/borderlessButtonStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contacts_btn"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         tools:layout_editor_absoluteY="16dp">

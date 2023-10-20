@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Labiofamandroid"
         tools:targetApi="31">
         <activity
+            android:name=".BioproductsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ServicesActivity"
             android:exported="false" />
         <activity
@@ -21,7 +24,6 @@
         <activity
             android:name=".ContactsViewActivity"
             android:exported="false" />
-
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

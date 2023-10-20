@@ -21,22 +21,6 @@
         >
     </TextView>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:layout_marginHorizontal="45dp"
-        android:text="@string/categories_text">
-
-    </TextView>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_Categories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
-        >
-
-    </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_Contacts"

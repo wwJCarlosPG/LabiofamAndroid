@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.daemon.common.isDaemonEnabled
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -33,6 +35,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    viewBinding {
+        enable = true
+    }
 }
 
 dependencies {
@@ -45,6 +51,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
     implementation("com.google.code.gson:gson:2.8.7")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

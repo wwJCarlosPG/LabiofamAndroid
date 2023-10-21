@@ -6,4 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".BioproductsActivity">
 
+    <TextView
+        android:id="@+id/tv_bioproducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:text="@string/bioproducts_text"
+        android:textStyle="bold"
+        android:textColor="@color/text"
+        android:layout_gravity="center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginVertical="25dp"
+
+        >
+    </TextView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bioproducts_categories_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_bioproducts"
+        android:layout_marginVertical="25dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bioproducts_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bioproducts_categories_rv"
+        android:layout_marginVertical="25dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

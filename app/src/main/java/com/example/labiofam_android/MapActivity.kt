@@ -3,6 +3,7 @@ package com.example.labiofam_android
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.SearchView
 import android.widget.TextView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -22,6 +23,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment)
                 as SupportMapFragment
         mapFragment.getMapAsync(this)
+
     }
 
     override fun getInfoContents(marker: Marker):View?

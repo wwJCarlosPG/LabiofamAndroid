@@ -17,12 +17,25 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListener, InfoWindowAdapter {
     private var mGoogleMap: GoogleMap? = null
+    private var searchView:SearchView?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+        searchView = findViewById(R.id.search_map)
+
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment)
                 as SupportMapFragment
         mapFragment.getMapAsync(this)
+        searchView!!.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                return true
+            }
+        })
 
     }
 

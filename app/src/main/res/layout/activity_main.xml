@@ -7,14 +7,11 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="16dp"
     tools:context=".MainActivity">
-
-
     <Button
         android:id="@+id/pv_btn"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="openPV"
         android:text="Puntos de Venta"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"

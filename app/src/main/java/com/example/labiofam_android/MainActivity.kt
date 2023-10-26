@@ -38,10 +38,10 @@ class MainActivity : AppCompatActivity()  {
         startActivity(intent)
     }
 
-    private fun navigateToServicesActivity() {
-        val intent = Intent(this, ServicesActivity::class.java)
-        startActivity(intent)
-    }
+   // private fun navigateToServicesActivity() {
+       // val intent = Intent(this, ServicesActivity::class.java)
+     //   startActivity(intent)
+   // }
 
 
 

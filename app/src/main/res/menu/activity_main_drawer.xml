@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/nav_item_biop"
+            android:icon="@drawable/biop_option2_icon"
+            android:title="Bioproductos">
+
+        </item>
+        <item
+            android:id="@+id/nav_item_pv"
+            android:icon="@drawable/sell_points_icon"
+            android:title="Puntos de Venta">
+        </item>
+        <item
+            android:id="@+id/nav_item_contacts"
+            android:icon="@drawable/contacts_icon"
+            android:title="Contactos">
+        </item>
+        <item
+            android:id="@+id/nav_item_services"
+            android:icon="@drawable/services_option2_icon"
+            android:title="Servicios">
+
+        </item>
+
+    </group>
+    <item
+        android:id = "@+id/feedback_item"
+        android:icon="@drawable/cell_icon"
+        android:title="Quejas y sugerencias"
+        ></item>
+
+
+</menu>

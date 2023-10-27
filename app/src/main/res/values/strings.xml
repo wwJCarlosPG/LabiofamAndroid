@@ -11,4 +11,6 @@
     <string name="services_text">Servicios</string>
     <string name="bioproducts_text">Bioproductos</string>
     <string name="phone_number_text">535335353</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
 </resources>

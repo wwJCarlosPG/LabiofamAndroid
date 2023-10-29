@@ -4,12 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_contacts"
+    android:orientation="vertical"
     tools:context=".ServicesActivity">
 
-    <ListView
-        android:id="@+id/listView"
+
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginVertical="40dp"
+        android:text="Servicios"
+        android:textColor="@color/text"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="104dp"
+        tools:layout_editor_absoluteY="16dp"></TextView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_Services"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

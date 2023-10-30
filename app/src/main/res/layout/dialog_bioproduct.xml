@@ -6,6 +6,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
+        android:id="@+id/bioproduct_dialog_back_buttom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:outlineAmbientShadowColor="@color/itemToCheck"
+        android:src="@drawable/back_buttom_vimage"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="24dp"
+        >
+
+    </ImageView>
+    
+    <ImageView
         android:id="@+id/bioproduct_dialog_iv"
         android:layout_width="300dp"
         android:layout_height="300dp"

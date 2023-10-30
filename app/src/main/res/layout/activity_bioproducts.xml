@@ -6,40 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".BioproductsActivity">
 
-    <TextView
-        android:id="@+id/tv_bioproducts"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/bioproducts_appBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="40sp"
-        android:text="@string/bioproducts_text"
-        android:textStyle="bold"
-        android:textColor="@color/text"
-        android:layout_gravity="center_horizontal"
+        android:fitsSystemWindows="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginVertical="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/bioproducts_categories_rv"
+        android:layout_marginBottom="26dp">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/itemToClick"
+            app:title="@string/bioproducts_text"
+            app:titleTextColor="@color/white"
+            app:layout_scrollFlags="scroll|enterAlways">
 
-        >
-    </TextView>
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bioproducts_categories_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_bioproducts"
-        android:layout_marginVertical="25dp">
+        app:layout_constraintTop_toBottomOf="@id/bioproducts_appBar"
+        app:layout_constraintBottom_toTopOf="@id/bioproducts_rv"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bioproducts_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="555dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bioproducts_categories_rv"
-        android:layout_marginVertical="25dp">
+
+        >
 
     </androidx.recyclerview.widget.RecyclerView>
 

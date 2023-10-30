@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="16dp"
     android:id="@+id/drawer_layout"
     tools:context=".MainActivity"
     tools:openDrawer="start">

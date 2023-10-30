@@ -6,4 +6,8 @@
     <color name="text">#474645</color>
     <color name="cardViewBackground">#EFCF6D</color>
     <color name="contactPhone">#0AB811</color>
+
+    <color name="itemToClick">#000A57</color>
+    <color name="itemToCheck">#001D8A</color>
+
 </resources>

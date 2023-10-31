@@ -18,7 +18,7 @@ class BioproductsCategoriesViewHolder(view: View) : RecyclerView.ViewHolder(view
         val color = if(bioproductCategory.isSelected){
             R.color.itemToClick
         } else{
-            R.color.itemToCheck
+            R.color.white
         }
 
         bioproducts_category_cv.setCardBackgroundColor(ContextCompat.getColor(bioproducts_category_cv.context, color))

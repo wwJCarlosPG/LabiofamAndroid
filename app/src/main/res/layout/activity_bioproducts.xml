@@ -20,7 +20,7 @@
             android:id="@+id/toolbar_main"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/itemToClick"
+            android:background="@color/itemToCheck"
             app:title="@string/bioproducts_text"
             app:titleTextColor="@color/white"
             app:layout_scrollFlags="scroll|enterAlways">
@@ -46,7 +46,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bioproducts_rv"
         android:layout_width="match_parent"
-        android:layout_height="555dp"
+        android:layout_height="600dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

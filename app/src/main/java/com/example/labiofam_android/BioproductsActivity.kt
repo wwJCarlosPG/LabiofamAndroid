@@ -24,16 +24,11 @@ class BioproductsActivity : AppCompatActivity() {
     )
 
     private val bioproducts = mutableListOf(
-        Bioproducts("Polvo Blanco", BioproductsCategories.Epidemias, "50usd", false, "....", ""),
-        Bioproducts("Polvo Blanco", BioproductsCategories.Epidemias, "50usd", false, "....", ""),
-        Bioproducts("Polvo Blanco", BioproductsCategories.Epidemias, "50usd", false, "....", ""),
-        Bioproducts("Polvo Blanco", BioproductsCategories.Epidemias, "50usd", false, "....", ""),
-        Bioproducts("Polvo Blanco", BioproductsCategories.Epidemias, "50usd", false, "....", ""),
-        Bioproducts("Polvo Blanco", BioproductsCategories.Epidemias, "50usd", false, "....", ""),
-        Bioproducts("Polvo Blanco", BioproductsCategories.Epidemias, "50usd", false, "....", ""),
-        Bioproducts("Polvo Blanco", BioproductsCategories.Epidemias, "50usd", false, "....", ""),
-        Bioproducts("Polvo Blanco", BioproductsCategories.Epidemias, "50usd", false, "....", ""),
-        Bioproducts("Polvo Blanco", BioproductsCategories.Epidemias, "50usd", false, "....", "")
+        Bioproducts("BACTIVEC", BioproductsCategories.Epidemias, "50usd", false, "....", "https://photos.google.com/photo/AF1QipNSZJnPVmp2p9rYiNHSzu9Hh9F_qHY-NqmACy52"),
+        Bioproducts("THURISLAVE-26", BioproductsCategories.Epidemias, "50usd", false, "....", "https://photos.google.com/photo/AF1QipMFdV-peyg3oZ6ZnyqMc9WmAucWKfuETNjES-qr"),
+        Bioproducts("THURISLAVE-13", BioproductsCategories.Epidemias, "50usd", false, "....", "https://photos.google.com/photo/AF1QipOCr4KSnGHbhYdPCl9pU2S5GPveHfCjo6wrBiyb"),
+        Bioproducts("NICOSAVE", BioproductsCategories.Epidemias, "50usd", false, "....", "https://photos.google.com/photo/AF1QipNDztc27-LEsDcsMWlKbNCZ28TmQUjfUPaiEu_8"),
+        Bioproducts("MELab", BioproductsCategories.Epidemias, "50usd", false, "....", "https://photos.google.com/photo/AF1QipM4eLpn7dAZNhJUBH5klrh5uYT8MGpwRIiHcmr2")
     )
 
     private lateinit var bioproducts_categories_rv:RecyclerView

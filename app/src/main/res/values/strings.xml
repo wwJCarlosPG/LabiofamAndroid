@@ -10,8 +10,7 @@
     <string name="position">Cargo</string>
     <string name="services_text">Servicios</string>
     <string name="bioproducts_text">Bioproductos</string>
-    <string name="phone_number_text">Número de Teléfono</string>
     <string name="navigation_drawer_open">Abrir</string>
     <string name="navigation_drawer_close">Cerrar</string>
-
+    <string name="phone_number_text">Número de Teléfono</string>
 </resources>

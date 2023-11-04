@@ -17,9 +17,13 @@ class BioproductsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun render(bioproduct: Bioproducts, onItemSelected: (Bioproducts) -> Unit){
         bioproduct_name_tv.text = bioproduct.name
-        //bioproduct_cost_tv.text = bioproduct.cost
-
-        Glide.with(bioproduct_iv.context).load(bioproduct.photo).into(bioproduct_iv)
+        when(bioproduct.photo) {
+            "bactivec.jpg" -> bioproduct_iv.setImageResource(R.drawable.bactivec)
+            "melab.jpg"->bioproduct_iv.setImageResource(R.drawable.melab)
+            "nicosave.jpg"->bioproduct_iv.setImageResource(R.drawable.nicosave)
+            "thurisave.jpg"->bioproduct_iv.setImageResource(R.drawable.thurisave)
+        }
+        //Glide.with(bioproduct_iv.context).load(bioproduct.photo).into(bioproduct_iv)
 
         bioproduct_cv.setOnClickListener { onItemSelected(bioproduct) }
     }

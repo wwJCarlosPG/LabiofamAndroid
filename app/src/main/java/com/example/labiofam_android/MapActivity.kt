@@ -63,6 +63,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         mGoogleMap?.setInfoWindowAdapter(this)
         val initialPosition = LatLng(21.5218, -77.7812)
         mGoogleMap!!.moveCamera(CameraUpdateFactory.newLatLng(initialPosition))
+        mGoogleMap!!.animateCamera(CameraUpdateFactory.zoomTo(5.0f))
         //aqui deberia recibir una lista de localizaciones y pintarlas todas
         val location1 = LatLng(20.02083, -75.82667)
         val location2 = LatLng(22.41667, -83.69667)

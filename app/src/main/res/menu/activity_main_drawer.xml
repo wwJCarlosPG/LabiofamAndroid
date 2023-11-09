@@ -21,7 +21,8 @@
         <item
             android:id="@+id/nav_item_services"
             android:icon="@drawable/services_option2_icon"
-            android:title="Servicios">
+            android:title="Servicios"
+            android:visible="false">
 
         </item>
 

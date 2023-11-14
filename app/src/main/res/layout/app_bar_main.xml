@@ -19,6 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/itemToCheck"
             app:title="Labiofam"
+            app:navigationIcon="@drawable/menu"
             app:titleTextColor="@color/white"
             app:layout_scrollFlags="scroll|enterAlways">
 

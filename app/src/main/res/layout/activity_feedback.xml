@@ -8,6 +8,7 @@
     tools:context=".FeedbackActivity">
 
 
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/feedback_app_bar"
         android:layout_width="match_parent"
@@ -77,6 +78,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Quejas y Sugerencias"
+        app:navigationIcon="@drawable/leftarrow"
         app:titleTextColor="@color/white">
 
 

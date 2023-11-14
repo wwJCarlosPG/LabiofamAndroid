@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
@@ -36,6 +37,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
                 return true
             }
         })
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.leftarrow)
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
     }
 

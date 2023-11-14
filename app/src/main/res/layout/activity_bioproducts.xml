@@ -23,6 +23,7 @@
             android:background="@color/itemToCheck"
             app:title="@string/bioproducts_text"
             app:titleTextColor="@color/white"
+            app:navigationIcon="@drawable/leftarrow"
             app:layout_scrollFlags="scroll|enterAlways">
 
 

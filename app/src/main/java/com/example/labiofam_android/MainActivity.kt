@@ -64,6 +64,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(this, ServicesActivity::class.java)
                 startActivity(intent)
             }
+            R.id.nav_item_feedback -> {
+                Toast.makeText(this, "Feedback", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, FeedbackActivity::class.java)
+                startActivity(intent)
+            }
         }
         drawer.closeDrawer(GravityCompat.START)
         return true

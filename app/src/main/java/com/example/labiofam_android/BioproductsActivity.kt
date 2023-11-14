@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +50,16 @@ class BioproductsActivity : AppCompatActivity() {
     private fun initComponent(){
         bioproducts_categories_rv = findViewById(R.id.bioproducts_categories_rv)
         bioproducts_rv = findViewById(R.id.bioproducts_rv)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.leftarrow)
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun initUI() {

@@ -24,6 +24,7 @@
             android:background="@color/itemToCheck"
             app:title="Contactos"
             app:titleTextColor="@color/white"
+            app:navigationIcon="@drawable/leftarrow"
             app:layout_scrollFlags="scroll|enterAlways">
 
 

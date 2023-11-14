@@ -28,7 +28,7 @@
 
     </group>
     <item
-        android:id = "@+id/feedback_item"
+        android:id = "@+id/nav_item_feedback"
         android:icon="@drawable/cell_icon"
         android:title="Quejas y sugerencias"
         ></item>

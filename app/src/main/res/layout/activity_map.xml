@@ -17,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.106">
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_main"
             android:layout_width="match_parent"
@@ -25,10 +24,8 @@
             android:background="@color/itemToCheck"
             app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="@drawable/leftarrow"
-            app:title="Quejas y Sugerencias"
+            app:title="Puntos de Venta"
             app:titleTextColor="@color/white">
-
-
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -47,7 +44,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.095">
-
     </SearchView>
 
     <CheckBox
@@ -58,10 +54,11 @@
         android:text="Por producto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.423"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintStart_toEndOf="@+id/checkBox_address"
         app:layout_constraintTop_toBottomOf="@+id/search_map"
-        app:layout_constraintVertical_bias="0.014"></CheckBox>
+        app:layout_constraintVertical_bias="0.014">
+    </CheckBox>
 
     <CheckBox
         android:id="@id/checkBox_address"
@@ -71,7 +68,8 @@
         android:layout_marginTop="8dp"
         android:text="Por dirección"
         app:layout_constraintStart_toEndOf="@+id/checkBox"
-        app:layout_constraintTop_toBottomOf="@+id/search_map" />
+        app:layout_constraintTop_toBottomOf="@+id/search_map"
+        tools:ignore="UnknownId" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/mapFragment"
@@ -83,7 +81,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox_address"></androidx.fragment.app.FragmentContainerView>
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_address"
+        tools:ignore="UnknownId"></androidx.fragment.app.FragmentContainerView>
 
     <!-- <TextView
          android:id="@+id/pointInfo"

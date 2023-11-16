@@ -10,52 +10,67 @@
         android:id="@+id/bioproducts_appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="26dp"
         android:fitsSystemWindows="true"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/search_bioproducts"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bioproducts_categories_rv"
-        android:layout_marginBottom="26dp">
+        app:layout_constraintVertical_bias="0.106">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_main"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/itemToCheck"
-            app:title="@string/bioproducts_text"
-            app:titleTextColor="@color/white"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="@drawable/leftarrow"
-            app:layout_scrollFlags="scroll|enterAlways">
-
-
+            app:title="Bioproductos"
+            app:titleTextColor="@color/white"
+            tools:ignore="MissingConstraints">
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-
+    <SearchView
+        android:id="@+id/search_bioproducts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:elevation="5dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="Escriba un producto"
+        app:layout_constraintBottom_toTopOf="@id/bioproducts_categories_rv"
+        app:layout_constraintEnd_toStartOf="@id/bioproducts_categories_rv"
+        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.095">
+    </SearchView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bioproducts_categories_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bioproducts_appBar"
         app:layout_constraintBottom_toTopOf="@id/bioproducts_rv"
         app:layout_constraintEnd_toEndOf="parent"
-        >
+        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintTop_toBottomOf="@+id/search_bioproducts"
+        app:layout_constraintVertical_bias="0.014">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bioproducts_rv"
-        android:layout_width="match_parent"
-        android:layout_height="600dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="398dp"
+        android:layout_height="455dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bioproducts_categories_rv"
-
-        >
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bioproducts_categories_rv"
+        tools:ignore="MissingConstraints">
 
     </androidx.recyclerview.widget.RecyclerView>
+
 
 
 

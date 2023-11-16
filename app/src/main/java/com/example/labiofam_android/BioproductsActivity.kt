@@ -19,9 +19,9 @@ import com.example.labiofam_android.Bioproducts.BioproductsCategoriesAdapter
 class BioproductsActivity : AppCompatActivity() {
 
     private val bioproductCategories = listOf(
+        BioproductsCategories.Other,
         BioproductsCategories.Agricola,
-        BioproductsCategories.Epidemias,
-        BioproductsCategories.Other
+        BioproductsCategories.Epidemias
     )
 
     private val bioproducts = mutableListOf(

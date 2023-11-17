@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 /*
+
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportActionBar.hide()
         this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -74,6 +75,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_item_feedback -> {
                 Toast.makeText(this, "Feedback", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, FeedbackActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_item_testimonials -> {
+                Toast.makeText(this, "Testimonios", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, TestimonialsActivity::class.java)
                 startActivity(intent)
             }
         }

@@ -67,7 +67,7 @@ class BioproductsActivity : AppCompatActivity() {
         bioproducts_categories_rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         bioproducts_categories_rv.adapter = bioproductsCategoriesAdapter
 
-        bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected = { navigateToBioproductDialog(it) })
+        bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
         bioproducts_rv.layoutManager = GridLayoutManager(this, 2)
         bioproducts_rv.adapter = bioproductsAdapter
     }
@@ -99,7 +99,7 @@ class BioproductsActivity : AppCompatActivity() {
         bioproduct_dialog_cost_tv.text = bioproduct.cost
         bioproduct_dialog_description_tv.text = bioproduct.description
 
-        Glide.with(bioproduct_dialog_iv.context).load(bioproduct.photo).into(bioproduct_dialog_iv)
+        //Glide.with(bioproduct_dialog_iv.context).load(bioproduct.photo).into(bioproduct_dialog_iv)
 
         bioproduct_dialog_back_buttom.setOnClickListener { dialog.hide() }
 

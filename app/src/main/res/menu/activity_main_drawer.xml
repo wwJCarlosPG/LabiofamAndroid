@@ -4,23 +4,24 @@
     <group>
         <item
             android:id="@+id/nav_item_biop"
-            android:icon="@drawable/biop_option2_icon"
+            android:icon="@drawable/biop4"
+            android:iconTintMode="src_over"
             android:title="Bioproductos">
 
         </item>
         <item
             android:id="@+id/nav_item_pv"
-            android:icon="@drawable/sell_points_icon"
+            android:icon="@drawable/pv3"
             android:title="Puntos de Venta">
         </item>
         <item
             android:id="@+id/nav_item_contacts"
-            android:icon="@drawable/contacts_icon"
+            android:icon="@drawable/contact2"
             android:title="Contactos">
         </item>
         <item
             android:id="@+id/nav_item_services"
-            android:icon="@drawable/services_option2_icon"
+            android:icon="@drawable/test"
             android:title="Servicios"
             android:visible="false">
 
@@ -28,10 +29,14 @@
 
     </group>
     <item
-        android:id = "@+id/nav_item_feedback"
-        android:icon="@drawable/cell_icon"
-        android:title="Quejas y sugerencias"
-        ></item>
+        android:id="@+id/nav_item_feedback"
+        android:icon="@drawable/feedback"
+        android:title="Quejas y sugerencias"></item>
+    <item
+        android:id ="@+id/nav_item_testimonials"
+        android:icon="@drawable/test"
+        android:title="Testimonios">
+    </item>
 
 
 </menu>

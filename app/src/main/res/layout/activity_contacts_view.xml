@@ -43,6 +43,25 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/labiofamColor"
+        app:backgroundTint="@color/labiofamColor"
+        android:layout_gravity="bottom"
+        app:elevation="12dp"
+        app:itemTextColor="#FFFFFF"
+        app:labelVisibilityMode="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/activiy_bottom_menu_contacts"></com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

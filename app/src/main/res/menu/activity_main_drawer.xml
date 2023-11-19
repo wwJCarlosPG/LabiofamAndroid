@@ -5,9 +5,7 @@
         <item
             android:id="@+id/nav_item_biop"
             android:icon="@drawable/biop4"
-            android:iconTintMode="src_over"
             android:title="Bioproductos">
-
         </item>
         <item
             android:id="@+id/nav_item_pv"
@@ -24,19 +22,18 @@
             android:icon="@drawable/test"
             android:title="Servicios"
             android:visible="false">
-
         </item>
-
+        <item
+            android:id="@+id/nav_item_feedback"
+            android:icon="@drawable/feedback"
+            android:title="Quejas y sugerencias">
+        </item>
+        <item
+            android:id ="@+id/nav_item_testimonials"
+            android:icon="@drawable/test"
+            android:title="Testimonios">
+        </item>
     </group>
-    <item
-        android:id="@+id/nav_item_feedback"
-        android:icon="@drawable/feedback"
-        android:title="Quejas y sugerencias"></item>
-    <item
-        android:id ="@+id/nav_item_testimonials"
-        android:icon="@drawable/test"
-        android:title="Testimonios">
-    </item>
 
 
 </menu>

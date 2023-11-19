@@ -1,5 +1,6 @@
 package com.example.labiofam_android
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -15,29 +16,26 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListener, InfoWindowAdapter {
-    private var mGoogleMap: GoogleMap? = null
-    private var searchView:SearchView?=null
+    private lateinit var mGoogleMap: GoogleMap
+    private lateinit var searchView:SearchView
+    private lateinit var toolbar:Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+        initUI()
+        initComponents()
+    }
+
+    fun initUI(){
         searchView = findViewById(R.id.search_map)
+    }
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment)
-                as SupportMapFragment
-        mapFragment.getMapAsync(this)
-        searchView!!.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-
-                return true
-            }
-        })
-        val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
+    fun initComponents(){
+        toolbar = findViewById<Toolbar>(R.id.toolbar_main)
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -47,20 +45,41 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment)
+                as SupportMapFragment
+        mapFragment.getMapAsync(this)
+        searchView!!.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
 
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                  return true
+            }
+        })
     }
-
     override fun getInfoContents(marker: Marker):View?
     {
+        //Aqui retorno lo de los bioproductos en el punto de venta
         //convierte la vista en un objeto
         //marker.position.latitude de esta manera puedo identificar
         //marker.id tambien existe pero no me queda claro que tan util sea
-        val view = layoutInflater.inflate(R.layout.activity_map, null)
+        val view = layoutInflater.inflate(R.layout.dialog_point, null)
         //obtiene info del marcador que se pasa como parametro
-        val info = "aqui recibo la informacion de la api"
-        val infoTextView = view.findViewById<TextView>(R.id.pointInfo)
+        val info = "aqui la api"
+        val infoTextView = view.findViewById<TextView>(R.id.sell_point_name_tv)
+        val infoTextView2 = view.findViewById<TextView>(R.id.sell_point_province_tv)
         infoTextView.text = info
+        infoTextView2.text = "Valencia"
+
         return view
+    }
+
+    private fun getRetrofit():Retrofit{
+        return Retrofit.Builder()
+            .baseUrl("")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     override fun onMarkerClick(marker:Marker):Boolean
@@ -69,6 +88,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         return true
     }
     override fun onMapReady(googleMap: GoogleMap) {
+
         mGoogleMap = googleMap
         mGoogleMap?.setOnMarkerClickListener(this)
         mGoogleMap?.setInfoWindowAdapter(this)

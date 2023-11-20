@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.appcompat.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,8 +21,8 @@ class BioproductsActivity : AppCompatActivity() {
 
     private val bioproductCategories = listOf(
         BioproductsCategories.Other,
-        BioproductsCategories.Agricola,
-        BioproductsCategories.Epidemias
+        BioproductsCategories.Epidemias,
+        BioproductsCategories.Agricola
     )
 
     private val bioproducts = mutableListOf(
@@ -34,6 +35,8 @@ class BioproductsActivity : AppCompatActivity() {
 
     private lateinit var bioproducts_categories_rv:RecyclerView
     private lateinit var bioproductsCategoriesAdapter: BioproductsCategoriesAdapter
+
+    private lateinit var bioproductsSearchView_sv: SearchView
 
     private lateinit var bioproducts_rv: RecyclerView
     private lateinit var bioproductsAdapter: BioproductsAdapter
@@ -50,6 +53,7 @@ class BioproductsActivity : AppCompatActivity() {
     private fun initComponent(){
         bioproducts_categories_rv = findViewById(R.id.bioproducts_categories_rv)
         bioproducts_rv = findViewById(R.id.bioproducts_rv)
+        bioproductsSearchView_sv = findViewById(R.id.search_bioproducts)
         val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
         setSupportActionBar(toolbar)
 
@@ -64,18 +68,58 @@ class BioproductsActivity : AppCompatActivity() {
 
     private fun initUI() {
         bioproductsCategoriesAdapter = BioproductsCategoriesAdapter(bioproductCategories) { position -> updateBioproductsCategories(position)}
+        for (item in bioproductCategories) { if(item == BioproductsCategories.Other){item.isSelected = true}}
         bioproducts_categories_rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         bioproducts_categories_rv.adapter = bioproductsCategoriesAdapter
 
         bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
         bioproducts_rv.layoutManager = GridLayoutManager(this, 2)
         bioproducts_rv.adapter = bioproductsAdapter
+
+        bioproductsSearchView_sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener
+        {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchByName(query.orEmpty())
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        }
+        )
+    }
+
+    private fun searchByName(query: String) {
+        val newBioproducts = bioproducts.filter { it.name.lowercase().contains(query.lowercase()) }
+        bioproductsAdapter.bioproducts = newBioproducts
+        bioproductsAdapter.notifyDataSetChanged()
     }
 
     private fun updateBioproductsCategories(position: Int){
-        bioproductCategories[position].isSelected = !bioproductCategories[position].isSelected
-        bioproductsCategoriesAdapter.notifyItemChanged(position)
-        updateBioproducts()
+
+        for (item in bioproductCategories)
+
+            if (item != bioproductCategories[position]) {
+                item.isSelected = false
+                bioproductsCategoriesAdapter.notifyItemChanged(bioproductCategories.indexOf(item))
+            }
+            else {
+                item.isSelected = !bioproductCategories[position].isSelected
+                bioproductsCategoriesAdapter.notifyItemChanged(position)
+                updateBioproducts()
+            }
+
+        if (bioproductCategories[position] == BioproductsCategories.Other &&
+            bioproductCategories[position].isSelected){
+            updateBioproductsAllSelected()
+        }
+    }
+
+    private fun updateBioproductsAllSelected() {
+        val newBioproducts = bioproducts.filter { bioproducts.contains(it) }
+        bioproductsAdapter.bioproducts = newBioproducts
+        bioproductsAdapter.notifyDataSetChanged()
     }
 
     private fun updateBioproducts(){

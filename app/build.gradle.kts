@@ -45,7 +45,7 @@ dependencies {
 
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.databinding:viewbinding:8.1.2")
+    //implementation("androidx.databinding:viewbinding:8.1.2")
     implementation("androidx.drawerlayout:drawerlayout:1.1.1")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.1.0")
     implementation("com.google.android.material:material:1.2.1")

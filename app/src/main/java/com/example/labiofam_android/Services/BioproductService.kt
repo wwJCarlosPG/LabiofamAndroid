@@ -12,10 +12,9 @@ interface BioproductService {
     @GET("Product/all")
     suspend fun getBioproducts()
 
-    @GET("Product/take/")
-    suspend fun getBioproductsWithPagination(@Field("size") size:Int)
+    @GET("Product/take/{size}")
+    suspend fun getBioproductsWithPagination(@Path("size") size:Int)
 
-    @FormUrlEncoded
-    @GET("Product/getbysubstring/")
-    suspend fun getBySubstring(@Field("substring") substring:String):Response<List<Bioproducts>>
+    @GET("Product/getbysubstring/{substring}")
+    suspend fun getBySubstring(@Path("substring") substring:String):Response<List<Bioproducts>>
 }

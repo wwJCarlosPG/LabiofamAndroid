@@ -58,24 +58,77 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment)
                 as SupportMapFragment
         mapFragment.getMapAsync(this)
+
         searchView!!.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
             override fun onQueryTextChange(newText: String?): Boolean {
-                GlobalScope.launch {
-
-                    val filteredSellPoints = sellPoint_service.getSellPointsByAddress(newText!!)
-                    filteredSellPoints.body()!!.forEach { item->
-                        val position = LatLng(item.latitude, item.longitude)
-                        mGoogleMap.addMarker(MarkerOptions().position(position))
-                    }
+                var location = newText.toString()
+                if(location==""){
+                    getAllSellPoints()
+                }
+                else{
+                    getBySubstring(location)
                 }
                 return true
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-                  return true
+                var location = query.toString()
+                if(location==""){
+                    getAllSellPoints()
+                }
+                else{
+                    getBySubstring(location)
+                }
+                return true
             }
         })
 
+    }
+    //metodo auxiliar cuando el search view esta vacio.
+    fun getAllSellPoints(){
+
+        GlobalScope.launch {
+            val sellPoints_response = sellPoint_service.getSellPoints()
+            if(sellPoints_response.isSuccessful){
+                var sellpoints = sellPoints_response.body()!!
+                Log.d("jc", "Entra a esta parte")
+                runOnUiThread{
+                    sellpoints.forEach{
+                            item->
+                        val location = LatLng(item.latitude, item.longitude)
+                        mGoogleMap.addMarker(MarkerOptions()
+                            .position(location))
+                    }
+                }
+
+            }
+            else{
+                Log.d("jc", "Entra al else")
+                //show error message(definir una vista para errores).
+            }
+        }
+
+
+    }
+    //metodo auxiliar cuando el search view tiene contenido.
+    fun getBySubstring(location:String){
+        GlobalScope.launch {
+            var sellPoints_by_address = sellPoint_service.getSellPointsByAddress(location)
+            if(sellPoints_by_address.isSuccessful){
+                Log.d("jc", "is successful")
+                runOnUiThread{
+                    mGoogleMap.clear()
+                }
+                sellPoints_by_address.body()!!.forEach { item->
+                    runOnUiThread{
+                        mGoogleMap.addMarker(MarkerOptions().position(LatLng(item.latitude, item.longitude)))
+                    }
+                }
+            }
+            else{
+                Log.d("jc", "No sirve")
+            }
+        }
     }
     override fun getInfoContents(marker: Marker):View?
     {

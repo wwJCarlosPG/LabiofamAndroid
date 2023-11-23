@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BioproductsActivity">
+    tools:context=".view.bioproduct.BioproductsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/bioproducts_appBar"

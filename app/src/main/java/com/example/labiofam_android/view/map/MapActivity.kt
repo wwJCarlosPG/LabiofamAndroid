@@ -1,15 +1,24 @@
 package com.example.labiofam_android.view.map
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.SearchView
+import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.example.labiofam_android.R
 import com.example.labiofam_android.Services.RetrofitHelper
 import com.example.labiofam_android.Services.SellPointService
+import com.example.labiofam_android.api_model.Bioproducts
 import com.example.labiofam_android.api_model.SellPoint
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -58,24 +67,77 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment)
                 as SupportMapFragment
         mapFragment.getMapAsync(this)
+
         searchView!!.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
             override fun onQueryTextChange(newText: String?): Boolean {
-                GlobalScope.launch {
-
-                    val filteredSellPoints = sellPoint_service.getSellPointsByAddress(newText!!)
-                    filteredSellPoints.body()!!.forEach { item->
-                        val position = LatLng(item.latitude, item.longitude)
-                        mGoogleMap.addMarker(MarkerOptions().position(position))
-                    }
+                var location = newText.toString()
+                if(location==""){
+                    getAllSellPoints()
+                }
+                else{
+                    getBySubstring(location)
                 }
                 return true
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-                  return true
+                var location = query.toString()
+                if(location==""){
+                    getAllSellPoints()
+                }
+                else{
+                    getBySubstring(location)
+                }
+                return true
             }
         })
 
+    }
+    //metodo auxiliar cuando el search view esta vacio.
+    fun getAllSellPoints(){
+
+        GlobalScope.launch {
+            val sellPoints_response = sellPoint_service.getSellPoints()
+            if(sellPoints_response.isSuccessful){
+                var sellpoints = sellPoints_response.body()!!
+                Log.d("jc", "Entra a esta parte")
+                runOnUiThread{
+                    sellpoints.forEach{
+                            item->
+                        val location = LatLng(item.latitude, item.longitude)
+                        mGoogleMap.addMarker(MarkerOptions()
+                            .position(location))
+                    }
+                }
+
+            }
+            else{
+                Log.d("jc", "Entra al else")
+                //show error message(definir una vista para errores).
+            }
+        }
+
+
+    }
+    //metodo auxiliar cuando el search view tiene contenido.
+    fun getBySubstring(location:String){
+        GlobalScope.launch {
+            var sellPoints_by_address = sellPoint_service.getSellPointsByAddress(location)
+            if(sellPoints_by_address.isSuccessful){
+                Log.d("jc", "is successful")
+                runOnUiThread{
+                    mGoogleMap.clear()
+                }
+                sellPoints_by_address.body()!!.forEach { item->
+                    runOnUiThread{
+                        mGoogleMap.addMarker(MarkerOptions().position(LatLng(item.latitude, item.longitude)))
+                    }
+                }
+            }
+            else{
+                Log.d("jc", "No sirve")
+            }
+        }
     }
     override fun getInfoContents(marker: Marker):View?
     {
@@ -84,20 +146,32 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         //marker.position.latitude de esta manera puedo identificar
         //marker.id tambien existe pero no me queda claro que tan util sea
 
-        val view = layoutInflater.inflate(R.layout.dialog_point, null)
-        //obtiene info del marcador que se pasa como parametro
-        val info = "aqui la api"
-        val infoTextView = view.findViewById<TextView>(R.id.sell_point_name_tv)
-        val infoTextView2 = view.findViewById<TextView>(R.id.sell_point_province_tv)
-        infoTextView.text = info
-        infoTextView2.text = "Valencia"
-
-        return view
+        return null
     }
 
     override fun onMarkerClick(marker:Marker):Boolean
     {
-        marker.showInfoWindow()
+        Log.d("jc","getInfowindow")
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_point)
+        //obtiene info del marcador que se pasa como parametro
+        var spinner:Spinner = dialog.findViewById(R.id.bioproducts_spinner)
+        var items = listOf("a","b", "c","d","e","f")
+        val adapter = ArrayAdapter(this,  android.R.layout.simple_spinner_item, items)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
+                val selectedItem = items[position]
+                Toast.makeText(this@MapActivity,"$selectedItem",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+        dialog.show()
         return true
     }
     override fun onMapReady(googleMap: GoogleMap) {
@@ -133,8 +207,22 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         }
 
 
+
     }
     override fun getInfoWindow(marker: Marker): View? {
+
         return null
+
+    }
+
+    fun showBioproducts(view: View) {
+        Log.d("jc", "entro aqui, no es mongolico")
+    }
+
+
+    private fun navigateToBioproductDialog() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_point)
+        dialog.show()
     }
 }

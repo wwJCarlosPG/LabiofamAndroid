@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.example.labiofam_android.R
+import com.example.labiofam_android.Services.BioproductService
 import com.example.labiofam_android.Services.RetrofitHelper
 import com.example.labiofam_android.Services.SellPointService
 import com.example.labiofam_android.api_model.Bioproducts
@@ -39,6 +40,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
     private lateinit var searchView:SearchView
     private lateinit var toolbar:Toolbar
     val sellPoint_service = RetrofitHelper.getInstance().create(SellPointService::class.java)
+    val bioproduct_service = RetrofitHelper.getInstance().create(BioproductService::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
@@ -141,10 +143,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
     }
     override fun getInfoContents(marker: Marker):View?
     {
-        //Aqui retorno lo de los bioproductos en el punto de venta
-        //convierte la vista en un objeto
-        //marker.position.latitude de esta manera puedo identificar
-        //marker.id tambien existe pero no me queda claro que tan util sea
 
         return null
     }
@@ -154,16 +152,31 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         Log.d("jc","getInfowindow")
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_point)
-        //obtiene info del marcador que se pasa como parametro
+        //cuando toque el marcador puedo saber su latitud y longitud y asi
+        //recojo todos los datos de este punto de venta, y estos datos los pinto
+        //en el dialog
         var spinner:Spinner = dialog.findViewById(R.id.bioproducts_spinner)
-        var items = listOf("a","b", "c","d","e","f")
+        //esta lista son los bioproductos disponibles para este punto de venta
+        //gettype1bytype2 coge el id del punto de venta y te da los productos para este
+        var items = listOf("Productos","Polvo blanco","Polvo azul", "Polvo rojo","Polvo verde","Polvo amarillo","Polvo negro")
         val adapter = ArrayAdapter(this,  android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
                 val selectedItem = items[position]
-                Toast.makeText(this@MapActivity,"$selectedItem",Toast.LENGTH_SHORT).show()
+                if(position!=0){
+                    Toast.makeText(this@MapActivity,"$selectedItem",Toast.LENGTH_SHORT).show()
+                    GlobalScope.launch {
+                        var response = bioproduct_service.getByName(items[position])
+                        if(response.isSuccessful){
+                            runOnUiThread {
+                            navigateToBioproductDialog(response.body()!!)
+                            }
+
+                        }
+                    }
+                }
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -194,8 +207,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
                     sellpoints.forEach{
                             item->
                         val location = LatLng(item.latitude, item.longitude)
+                        val markerOptions:MarkerOptions = MarkerOptions()
+                            .position(location)
+
                         googleMap.addMarker(MarkerOptions()
                             .position(location))
+
                     }
                 }
 
@@ -219,8 +236,27 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         Log.d("jc", "entro aqui, no es mongolico")
     }
 
+    private fun navigateToBioproductDialog(bioproduct: Bioproducts) {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_bioproduct)
 
-    private fun navigateToBioproductDialog() {
+        var bioproduct_dialog_name_tv: TextView = dialog.findViewById(R.id.bioproduct_dialog_name_tv)
+        var bioproduct_dialog_summary_tv: TextView = dialog.findViewById(R.id.bioproduct_dialog_summary_tv)
+        var bioproduct_dialog_description_tv: TextView = dialog.findViewById(R.id.bioproduct_dialog_description_tv)
+        var bioproduct_dialog_iv: ImageView = dialog.findViewById(R.id.bioproduct_dialog_iv)
+        var bioproduct_dialog_back_buttom: ImageView = dialog.findViewById((R.id.bioproduct_dialog_back_buttom))
+
+        bioproduct_dialog_name_tv.text = bioproduct.name.toString()
+        bioproduct_dialog_description_tv.text = bioproduct.specifications
+        bioproduct_dialog_summary_tv.text = bioproduct.summary
+        //Glide.with(bioproduct_dialog_iv.context).load(bioproduct.photo).into(bioproduct_dialog_iv)
+
+        bioproduct_dialog_back_buttom.setOnClickListener { dialog.hide() }
+
+        dialog.show()
+    }
+
+    private fun navigateToSellPointDialog() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_point)
         dialog.show()

@@ -10,7 +10,7 @@ import retrofit2.http.Path
 interface BioproductService {
 
     @GET("Product/all")
-    suspend fun getBioproducts()
+    suspend fun getBioproducts():Response<List<Bioproducts>>
 
     @GET("Product/take/{size}")
     suspend fun getBioproductsWithPagination(@Path("size") size:Int)

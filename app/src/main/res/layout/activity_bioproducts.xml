@@ -41,47 +41,32 @@
         android:queryHint="Escriba un producto"
         app:layout_constraintBottom_toTopOf="@id/bioproducts_categories_rv"
         app:layout_constraintEnd_toStartOf="@id/bioproducts_categories_rv"
-        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.095">
-    </SearchView>
+        app:layout_constraintTop_toBottomOf="@id/bioproducts_appBar"
+        app:layout_constraintVertical_bias="0.095"></SearchView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bioproducts_categories_rv"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/bioproducts_rv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_bioproducts"
         app:layout_constraintVertical_bias="0.014">
 
     </androidx.recyclerview.widget.RecyclerView>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bioproducts_rv"
-        android:layout_width="398dp"
-        android:layout_height="455dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bioproducts_categories_rv"
-        tools:ignore="MissingConstraints">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_bottom_menu"
-        android:background="@color/labiofamColor"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:labelVisibilityMode="auto"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/nav_bottom_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/activiy_bottom_menu_contacts">
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        app:layout_constraintTop_toBottomOf="@+id/bioproducts_categories_rv"></androidx.recyclerview.widget.RecyclerView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

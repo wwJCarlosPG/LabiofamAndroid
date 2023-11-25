@@ -43,7 +43,7 @@
     </TextView>
 
     <TextView
-        android:id="@+id/bioproduct_dialog_cost_tv"
+        android:id="@+id/bioproduct_dialog_summary_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bioproduct_dialog_cost_tv"
+        app:layout_constraintTop_toBottomOf="@+id/bioproduct_dialog_summary_tv"
         tools:text="Descripcion"
         android:textSize="16sp"
         android:layout_marginVertical="8dp">

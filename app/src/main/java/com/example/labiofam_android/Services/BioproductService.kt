@@ -17,4 +17,7 @@ interface BioproductService {
 
     @GET("Product/getbysubstring/{substring}")
     suspend fun getBySubstring(@Path("substring") substring:String):Response<List<Bioproducts>>
+
+    @GET("Product/name/{name}")
+    suspend fun getByName(@Path("name") name:String):Response<Bioproducts>
 }

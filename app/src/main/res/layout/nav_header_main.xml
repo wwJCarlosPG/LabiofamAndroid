@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:text="Menú"
+        android:fontFamily="@font/cambay"
         android:textAppearance="@style/TextAppearance.AppCompat.Title">
     </TextView>
 

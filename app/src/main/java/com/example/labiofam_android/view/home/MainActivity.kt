@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var random_product_iv1:ImageView
+    private lateinit var random_product_iv2:ImageView
+    private lateinit var random_product_iv3:ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,7 +39,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
-
+        random_product_iv1 = findViewById(R.id.random_product_iv1)
+        random_product_iv2 = findViewById(R.id.random_product_iv2)
+        random_product_iv3 = findViewById(R.id.random_product_iv3)
         drawer = findViewById(R.id.drawer_layout)
         toggle = ActionBarDrawerToggle(this, drawer, toolbar,
             R.string.navigation_drawer_open,

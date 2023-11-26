@@ -19,7 +19,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/labiofamColor"
             app:title="Labiofam"
-            app:navigationIcon="@drawable/menu"
+            android:fontFamily="@font/cambay"
+            app:navigationIcon="@drawable/menu2"
             app:titleTextColor="@color/white"
             app:layout_scrollFlags="scroll|enterAlways">
 

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
+    android:background="@color/white"
     tools:context=".view.home.MainActivity"
     tools:openDrawer="start">
 
@@ -14,7 +15,12 @@
         android:layout_width="match_parent">
 
     </include>
+    <include
+        layout="@layout/home_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
 
+    </include>
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"

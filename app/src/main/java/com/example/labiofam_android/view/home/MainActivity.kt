@@ -39,9 +39,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
-        random_product_iv1 = findViewById(R.id.random_product_iv1)
-        random_product_iv2 = findViewById(R.id.random_product_iv2)
-        random_product_iv3 = findViewById(R.id.random_product_iv3)
+        random_product_iv1 = findViewById(R.id.random_iv1)
+        random_product_iv2 = findViewById(R.id.random_iv2)
+        random_product_iv3 = findViewById(R.id.random_iv3)
         drawer = findViewById(R.id.drawer_layout)
         toggle = ActionBarDrawerToggle(this, drawer, toolbar,
             R.string.navigation_drawer_open,

@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.labiofam_android.R
 import com.example.labiofam_android.api_model.Bioproducts
 
@@ -17,14 +18,7 @@ class BioproductsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun render(bioproduct: Bioproducts, onItemSelected: (Bioproducts) -> Unit){
         bioproduct_name_tv.text = bioproduct.name
-        when(bioproduct.image) {
-            "bactivec.jpg" -> bioproduct_iv.setImageResource(R.drawable.bactivec)
-            "melab.jpg"->bioproduct_iv.setImageResource(R.drawable.melab)
-            "nicosave.jpg"->bioproduct_iv.setImageResource(R.drawable.nicosave)
-            "thurisave.jpg"->bioproduct_iv.setImageResource(R.drawable.thurisave)
-        }
-        //Glide.with(bioproduct_iv.context).load(bioproduct.photo).into(bioproduct_iv)
-
+        Glide.with(bioproduct_iv.context).load(bioproduct.image).into(bioproduct_iv)
         bioproduct_cv.setOnClickListener { onItemSelected(bioproduct) }
     }
 }

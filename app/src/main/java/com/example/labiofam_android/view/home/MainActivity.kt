@@ -1,5 +1,6 @@
 package com.example.labiofam_android.view.home
 
+import android.app.Dialog
 import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.example.labiofam_android.R
 import com.example.labiofam_android.Services.BioproductService
 import com.example.labiofam_android.Services.RetrofitHelper
+import com.example.labiofam_android.databinding.ActivityMainBinding
 import com.example.labiofam_android.view.map.MapActivity
 import com.example.labiofam_android.view.testimony.TestimonialsActivity
 import com.example.labiofam_android.view.bioproduct.BioproductsActivity
@@ -36,7 +39,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
 
@@ -58,29 +60,45 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val bioproduct_service = RetrofitHelper.getInstance().create(BioproductService::class.java)
 
-        /*GlobalScope.launch {
+        GlobalScope.launch {
             try {
 
                 var response = bioproduct_service.getBioproducts()
+                //esto es lo que tengo que borrar
+                var rs1 = bioproduct_service.getByName("Aceite Random 1")
+                var rs2 = bioproduct_service.getByName("Aceite Random 2")
+                var rs3 = bioproduct_service.getByName("Aceite Random 3")
                 if(response.isSuccessful){
-                    val random1:Int = Random.nextInt(1,response.body()!!.size-2)
-                    val random2 = 0
-                    val random3:Int = response.body()!!.size-1
+                    //val random1:Int = Random.nextInt(1,response.body()!!.size-2)
+                    //val random2 = 0
+                    //val random3:Int = response.body()!!.size-1
                     runOnUiThread{
-                        Glide.with(random_product_iv1.context).load(response.body()!![random1].image).into(random_product_iv1)
-                        Glide.with(random_product_iv2.context).load(response.body()!![random2].image).into(random_product_iv2)
-                        Glide.with(random_product_iv3.context).load(response.body()!![random3].image).into(random_product_iv3)
+                        //aqui voy a modificar pero lo que va es random1 random2 y random3 en los indices
+                        //Glide.with(random_product_iv1.context).load(response.body()!![random1].image).into(random_product_iv1)
+                        //Glide.with(random_product_iv2.context).load(response.body()!![random2].image).into(random_product_iv2)
+                        //Glide.with(random_product_iv3.context).load(response.body()!![random3].image).into(random_product_iv3)
+                        Glide.with(random_product_iv1.context).load(rs1.body()!!.image).into(random_product_iv1)
+                        Glide.with(random_product_iv2.context).load(rs2.body()!!.image).into(random_product_iv2)
+                        Glide.with(random_product_iv3.context).load(rs3.body()!!.image).into(random_product_iv3)
                     }
 
                 }
                 else{
-                    //show dialog
+                    throw Exception()
                 }
             }
             catch (e: Exception){
-                    //show dialog
+                val dialog = Dialog(this@MainActivity)
+                dialog.setContentView(R.layout.dialog_bioproduct)
+                var error_dialog_tv: TextView = dialog.findViewById(R.id.error_dialog_tv)
+                var error_dialog_backbtn = dialog.findViewById<ImageView>(R.id.error_dialog_back_btn)
+                error_dialog_tv.text = "ERROR MADANFAKA"
+                error_dialog_backbtn.setOnClickListener { dialog.hide() }
+
+                dialog.show()
+
             }
-        }*/
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

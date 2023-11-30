@@ -28,6 +28,12 @@
 
     </ImageView>
 
+    <TextView
+        android:id="@+id/error_dialog_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="HAY ERROR MADANFAKA"></TextView>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

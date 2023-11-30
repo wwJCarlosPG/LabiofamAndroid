@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.labiofam_android.R
 import com.example.labiofam_android.Services.BioproductService
 import com.example.labiofam_android.Services.RetrofitHelper
@@ -172,7 +173,7 @@ class BioproductsActivity : AppCompatActivity() {
         bioproduct_dialog_name_tv.text = bioproduct.name.toString()
         bioproduct_dialog_description_tv.text = bioproduct.specifications
         bioproduct_dialog_summary_tv.text = bioproduct.summary
-        //Glide.with(bioproduct_dialog_iv.context).load(bioproduct.photo).into(bioproduct_dialog_iv)
+        Glide.with(bioproduct_dialog_iv.context).load(bioproduct.image).into(bioproduct_dialog_iv)
 
         bioproduct_dialog_back_buttom.setOnClickListener { dialog.hide() }
 

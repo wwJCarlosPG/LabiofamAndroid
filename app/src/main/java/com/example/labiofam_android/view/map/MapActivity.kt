@@ -15,6 +15,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import com.example.labiofam_android.R
 import com.example.labiofam_android.Services.BioproductService
 import com.example.labiofam_android.Services.RetrofitHelper
@@ -198,7 +199,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         //esto debo meterlo en una funcion en el viewModel
 
         var sellpoints:List<SellPoint> = listOf<SellPoint>()
-        GlobalScope.launch {
+
+        lifecycleScope.launch {
             val sellPoints_response = sellPoint_service.getSellPoints()
             if(sellPoints_response.isSuccessful){
                 sellpoints = sellPoints_response.body()!!

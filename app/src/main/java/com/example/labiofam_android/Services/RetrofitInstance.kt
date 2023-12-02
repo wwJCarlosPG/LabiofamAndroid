@@ -7,6 +7,8 @@ import java.util.concurrent.TimeUnit
 object RetrofitHelper {
 
     val baseUrl = "http://10.0.2.2:5263/api/"
+    //val baseUrl = "http://192.168.153.205:5263/api/"
+    //val baseUrl = "http://localhost:5263/api/"
     //cuado se esta probando en emulador se pone esa direccion ip en vez de localhost
     fun getInstance(): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl)

@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import com.example.labiofam_android.R
 import com.example.labiofam_android.Services.FeedbackService
 import com.example.labiofam_android.Services.RetrofitHelper
@@ -58,6 +59,7 @@ class FeedbackActivity: AppCompatActivity(){
         Log.d("jc","Entro al metodo")
         if(editText_name.text!=null && editText_mail.text != null &&
             editText_phone.text != null && editText_message.text!=null){
+            //tengo que usar global scope aqui al parecer.
             GlobalScope.launch {
                 Log.d("jc","Entro a la corrutina")
                 delay(7000)

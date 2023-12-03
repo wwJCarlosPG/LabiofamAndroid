@@ -99,7 +99,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
     //metodo auxiliar cuando el search view esta vacio.
     fun getAllSellPoints(){
 
-        GlobalScope.launch {
+        lifecycleScope.launch {
             val sellPoints_response = sellPoint_service.getSellPoints()
             if(sellPoints_response.isSuccessful){
                 var sellpoints = sellPoints_response.body()!!

@@ -46,6 +46,7 @@ dependencies {
 
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.activity:activity-ktx:1.8.1")
     //implementation("androidx.databinding:viewbinding:8.1.2")

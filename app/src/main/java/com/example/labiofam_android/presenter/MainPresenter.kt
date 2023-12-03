@@ -1,16 +1,10 @@
-package com.example.labiofam_android.view.home
+package com.example.labiofam_android.presenter
 
-import androidx.lifecycle.lifecycleScope
-import com.example.labiofam_android.Services.BioproductService
-import com.example.labiofam_android.Services.RetrofitHelper
 import com.example.labiofam_android.api_model.Bioproducts
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.labiofam_android.contract.MainContract
 
-class MainPresenter(mainView:MainContract.View,
-                    mainModel:MainContract.Model):MainContract.Presenter {
+class MainPresenter(mainView: MainContract.View,
+                    mainModel: MainContract.Model): MainContract.Presenter {
     var mainView = mainView
     var mainModel = mainModel
     var result:MutableList<Bioproducts> = mutableListOf()

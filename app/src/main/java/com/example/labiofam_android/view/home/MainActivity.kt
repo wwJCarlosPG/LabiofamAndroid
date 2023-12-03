@@ -1,6 +1,5 @@
 package com.example.labiofam_android.view.home
 
-import android.app.Dialog
 import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +7,6 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.MenuItem
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -16,10 +14,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.labiofam_android.R
-import com.example.labiofam_android.Services.BioproductService
-import com.example.labiofam_android.Services.RetrofitHelper
 import com.example.labiofam_android.api_model.Bioproducts
-import com.example.labiofam_android.databinding.ActivityMainBinding
+import com.example.labiofam_android.contract.MainContract
+import com.example.labiofam_android.model.MainModel
+import com.example.labiofam_android.presenter.MainPresenter
 import com.example.labiofam_android.view.map.MapActivity
 import com.example.labiofam_android.view.testimony.TestimonialsActivity
 import com.example.labiofam_android.view.bioproduct.BioproductsActivity
@@ -28,12 +26,10 @@ import com.example.labiofam_android.view.feedback.FeedbackActivity
 import com.example.labiofam_android.view.service.ServicesActivity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import com.example.labiofam_android.view_interface.ViewInterface
-import kotlin.random.Random
 
-class MainActivity : AppCompatActivity(),MainContract.View,ViewInterface, NavigationView.OnNavigationItemSelectedListener  {
+class MainActivity : AppCompatActivity(), MainContract.View,ViewInterface, NavigationView.OnNavigationItemSelectedListener  {
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
@@ -41,18 +37,13 @@ class MainActivity : AppCompatActivity(),MainContract.View,ViewInterface, Naviga
     private lateinit var random_product_iv2:ImageView
     private lateinit var random_product_iv3:ImageView
     private lateinit var bioproducts:MutableList<Bioproducts>
-    private var mainModel:MainModel = MainModel()
+    private var mainModel: MainModel = MainModel()
     private var main_presenter = MainPresenter(this, mainModel)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         initComponents()
         initUI()
-
-//        val bioproduct_service = RetrofitHelper.getInstance().create(BioproductService::class.java)
-
-
     }
 
 

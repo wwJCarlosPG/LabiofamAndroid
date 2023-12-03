@@ -1,4 +1,4 @@
-package com.example.labiofam_android.view.home
+package com.example.labiofam_android.contract
 
 import com.example.labiofam_android.api_model.Bioproducts
 import retrofit2.Response

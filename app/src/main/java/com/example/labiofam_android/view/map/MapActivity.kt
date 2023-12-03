@@ -22,6 +22,12 @@ import com.example.labiofam_android.Services.RetrofitHelper
 import com.example.labiofam_android.Services.SellPointService
 import com.example.labiofam_android.api_model.Bioproducts
 import com.example.labiofam_android.api_model.SellPoint
+import com.example.labiofam_android.contract.MapContract
+import com.example.labiofam_android.contract.SellPointToBioproductContract
+import com.example.labiofam_android.model.MapModel
+import com.example.labiofam_android.model.SellPointToBioproductModel
+import com.example.labiofam_android.presenter.MapPresenter
+import com.example.labiofam_android.presenter.SellPointToBioproductPresenter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
@@ -31,32 +37,38 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.nio.channels.FileChannel.MapMode
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListener, InfoWindowAdapter {
+class MapActivity : AppCompatActivity(),MapContract.MapView, SellPointToBioproductContract.SellPointToBioproductView, OnMapReadyCallback, OnMarkerClickListener, InfoWindowAdapter {
     private lateinit var mGoogleMap: GoogleMap
     private lateinit var searchView:SearchView
     private lateinit var toolbar:Toolbar
     val sellPoint_service = RetrofitHelper.getInstance().create(SellPointService::class.java)
     val bioproduct_service = RetrofitHelper.getInstance().create(BioproductService::class.java)
+    val map_model:MapContract.MapModel = MapModel()
+    val sellPointToBioproductModel:SellPointToBioproductContract.SellPointToBioproductModel = SellPointToBioproductModel()
+    val map_presenter = MapPresenter(this@MapActivity, map_model)
+    val sellPointToBioproduct_presenter = SellPointToBioproductPresenter(this@MapActivity,sellPointToBioproductModel )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
         initUI()
         initComponents()
-        //val api = RetrofitHelper.getInstance().create(SellPointService::class.java)
-
     }
 
     fun initUI(){
-        searchView = findViewById(R.id.search_map)
     }
 
 
     fun initComponents(){
+        searchView = findViewById(R.id.search_map)
         toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
 
@@ -99,10 +111,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
     //metodo auxiliar cuando el search view esta vacio.
     fun getAllSellPoints(){
 
-        lifecycleScope.launch {
-            val sellPoints_response = sellPoint_service.getSellPoints()
-            if(sellPoints_response.isSuccessful){
-                var sellpoints = sellPoints_response.body()!!
+        lifecycleScope.launch(Dispatchers.IO) {
+            val sellPoints_response = map_presenter.getSellPoints()
+            if(sellPoints_response.isNotEmpty()){
+                var sellpoints = sellPoints_response
                 Log.d("jc", "Entra a esta parte")
                 runOnUiThread{
                     sellpoints.forEach{
@@ -110,6 +122,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
                         val location = LatLng(item.latitude, item.longitude)
                         mGoogleMap.addMarker(MarkerOptions()
                             .position(location))
+
                     }
                 }
 
@@ -125,13 +138,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
     //metodo auxiliar cuando el search view tiene contenido.
     fun getBySubstring(location:String){
         GlobalScope.launch {
-            var sellPoints_by_address = sellPoint_service.getSellPointsByAddress(location)
-            if(sellPoints_by_address.isSuccessful){
-                Log.d("jc", "is successful")
+            var sellPoints_by_address = map_presenter.getSellPointByAddress(location)
+            if(sellPoints_by_address.isNotEmpty()){
                 runOnUiThread{
                     mGoogleMap.clear()
                 }
-                sellPoints_by_address.body()!!.forEach { item->
+                sellPoints_by_address.forEach { item->
                     runOnUiThread{
                         mGoogleMap.addMarker(MarkerOptions().position(LatLng(item.latitude, item.longitude)))
                     }
@@ -144,49 +156,74 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
     }
     override fun getInfoContents(marker: Marker):View?
     {
-
         return null
     }
 
-    override fun onMarkerClick(marker:Marker):Boolean
-    {
-        Log.d("jc","getInfowindow")
+    override fun onMarkerClick(marker: Marker): Boolean {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_point)
-        //cuando toque el marcador puedo saber su latitud y longitud y asi
-        //recojo todos los datos de este punto de venta, y estos datos los pinto
-        //en el dialog
-        var spinner:Spinner = dialog.findViewById(R.id.bioproducts_spinner)
-        //esta lista son los bioproductos disponibles para este punto de venta
-        //gettype1bytype2 coge el id del punto de venta y te da los productos para este
-        var items = listOf("Productos","Polvo blanco","Polvo azul", "Polvo rojo","Polvo verde","Polvo amarillo","Polvo negro")
-        val adapter = ArrayAdapter(this,  android.R.layout.simple_spinner_item, items)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
-        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
-                val selectedItem = items[position]
-                if(position!=0){
-                    Toast.makeText(this@MapActivity,"$selectedItem",Toast.LENGTH_SHORT).show()
-                    GlobalScope.launch {
-                        var response = bioproduct_service.getByName(items[position])
-                        if(response.isSuccessful){
-                            runOnUiThread {
-                            navigateToBioproductDialog(response.body()!!)
+        var latitude = marker.position.latitude
+        var longitude = marker.position.longitude
+        lifecycleScope.launch(Dispatchers.IO) {
+            var sellPoint = map_presenter.getByGeolocation(
+                latitude, longitude
+            )
+            var bioproductsBySellPoint = sellPointToBioproduct_presenter.getBioproductsBySellPoint(sellPoint.id)
+            withContext(Dispatchers.Main) {
+                initSellPointDialog(dialog, sellPoint)
+                var spinner: Spinner = dialog.findViewById(R.id.bioproducts_spinner)
+                var items = mutableListOf<String>()
+                items.add("Productos disponibles")
+                bioproductsBySellPoint.forEach{biop->
+                     items.add(biop.name)
+                }
+                val adapter = ArrayAdapter(
+                    this@MapActivity,
+                    android.R.layout.simple_spinner_item,
+                    items
+                )
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = adapter
+                spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        p0: AdapterView<*>?,
+                        p1: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        val selectedItem = items[position]
+                        if (position != 0) {
+                            Toast.makeText(
+                                this@MapActivity,
+                                "$selectedItem",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                var selectedBioproduct = bioproductsBySellPoint.firstOrNull { it.name==selectedItem }//aqui busco un bioproducto por el nombre
+                                runOnUiThread {
+                                    navigateToBioproductDialog(selectedBioproduct!!)
+                                }
                             }
-
                         }
                     }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                    }
                 }
+                dialog.show()
             }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
         }
-        dialog.show()
         return true
+    }
+    fun initSellPointDialog(dialog:Dialog, sellPoint:SellPoint){
+        var sellpoint_name_tv:TextView = dialog.findViewById(R.id.sellpoint_name_tv)
+        sellpoint_name_tv.text = sellPoint.name
+        var sellpoint_addrress_tv:TextView = dialog.findViewById(R.id.sellpoint_address)
+        sellpoint_addrress_tv.text = sellPoint.address
+        var sellpoint_province_tv:TextView = dialog.findViewById(R.id.sellpoint_province_tv)
+        sellpoint_province_tv.text = sellPoint.province
+        var sellpoint_municipality_tv:TextView = dialog.findViewById(R.id.sellpoint_municipality_tv)
+        sellpoint_municipality_tv.text = sellPoint.province
     }
     override fun onMapReady(googleMap: GoogleMap) {
 
@@ -196,34 +233,27 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         val initialPosition = LatLng(21.5218, -77.7812)
         mGoogleMap!!.moveCamera(CameraUpdateFactory.newLatLng(initialPosition))
         mGoogleMap!!.animateCamera(CameraUpdateFactory.zoomTo(5.0f))
-        //esto debo meterlo en una funcion en el viewModel
+        lifecycleScope.launch(Dispatchers.IO){
+                val sellPoints = map_presenter.getSellPoints()
+                if(sellPoints.isNotEmpty()){
+                    runOnUiThread{
+                        sellPoints.forEach{
+                                sp->
+                            val location = LatLng(sp.latitude, sp.longitude)
+                            mGoogleMap.addMarker(MarkerOptions()
+                                .position(location))
 
-        var sellpoints:List<SellPoint> = listOf<SellPoint>()
-
-        lifecycleScope.launch {
-            val sellPoints_response = sellPoint_service.getSellPoints()
-            if(sellPoints_response.isSuccessful){
-                sellpoints = sellPoints_response.body()!!
-                Log.d("jc", "Entra a esta parte")
-                runOnUiThread{
-                    sellpoints.forEach{
-                            item->
-                        val location = LatLng(item.latitude, item.longitude)
-                        val markerOptions:MarkerOptions = MarkerOptions()
-                            .position(location)
-
-                        googleMap.addMarker(MarkerOptions()
-                            .position(location))
-
+                        }
                     }
                 }
+            else{
+                Log.d("jc", "No hay puntos de venta")
+            }
+
 
             }
-            else{
-                Log.d("jc", "Entra al else")
-                //show error message(definir una vista para errores).
-            }
-        }
+
+
 
 
 
@@ -255,12 +285,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
 
         bioproduct_dialog_back_buttom.setOnClickListener { dialog.hide() }
 
-        dialog.show()
-    }
-
-    private fun navigateToSellPointDialog() {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_point)
         dialog.show()
     }
 }

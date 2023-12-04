@@ -10,7 +10,7 @@ interface BioproductContract {
     }
     interface BioproductPresenter{
         suspend fun getBioproducts():List<Bioproducts>
-        suspend fun getBioproductBySubstring(substring:String)
+        suspend fun getBioproductBySubstring(substring:String):List<Bioproducts>
     }
     interface BioproductModel{
         suspend fun getBioproducts(): Response<List<Bioproducts>>

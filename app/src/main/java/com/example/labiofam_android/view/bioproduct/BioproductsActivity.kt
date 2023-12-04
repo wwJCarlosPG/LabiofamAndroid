@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,12 +18,16 @@ import com.example.labiofam_android.Services.BioproductService
 import com.example.labiofam_android.Services.RetrofitHelper
 import com.example.labiofam_android.Services.SellPointService
 import com.example.labiofam_android.api_model.Bioproducts
+import com.example.labiofam_android.contract.BioproductContract
+import com.example.labiofam_android.model.BioproductModel
+import com.example.labiofam_android.presenter.BioproductPresenter
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class BioproductsActivity : AppCompatActivity() {
+class BioproductsActivity : AppCompatActivity(), BioproductContract.BioproductView {
 
     private val bioproductCategories = listOf(
         BioproductsCategories.Other,
@@ -36,6 +41,8 @@ class BioproductsActivity : AppCompatActivity() {
     private lateinit var bioproductsCategoriesAdapter: BioproductsCategoriesAdapter
     private lateinit var  search_bioproducts:SearchView
     private lateinit var bioproducts_rv: RecyclerView
+    private var bioproduct_model = BioproductModel()
+    private var bioproduct_presenter = BioproductPresenter(this@BioproductsActivity, bioproduct_model)
     private lateinit var bioproductsAdapter: BioproductsAdapter
     val bioproduct_service = RetrofitHelper.getInstance().create(BioproductService::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,11 +94,9 @@ class BioproductsActivity : AppCompatActivity() {
         })
     }
     fun getAllBioproducts(){
-        GlobalScope.launch {
-            val bioproducts_response = bioproduct_service.getBioproducts()
-            if(bioproducts_response.isSuccessful){
-                bioproducts = bioproducts_response.body()!!
-                Log.d("jc", "Entra a esta parte")
+        lifecycleScope.launch(Dispatchers.IO) {
+            val bioproducts = bioproduct_presenter.getBioproducts()
+            if(bioproducts.isNotEmpty()){
                 runOnUiThread{
                     bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
                     bioproductsAdapter.bioproducts = bioproducts
@@ -108,10 +113,9 @@ class BioproductsActivity : AppCompatActivity() {
         }
     }
     fun getBySubstring(substring:String){
-        GlobalScope.launch {
-            val bioproducts_response = bioproduct_service.getBySubstring(substring)
-            if(bioproducts_response.isSuccessful){
-                bioproducts = bioproducts_response.body()!!
+        lifecycleScope.launch(Dispatchers.IO) {
+            val bioproducts = bioproduct_presenter.getBioproductBySubstring(substring)
+            if(bioproducts.isNotEmpty()){
                 Log.d("jc", "${bioproducts.size}")
                 runOnUiThread{
                     bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
@@ -124,25 +128,17 @@ class BioproductsActivity : AppCompatActivity() {
 
             }
             else{
-                Log.d("jc", "Entra al else")
+
                 //show error message(definir una vista para errores).
             }
         }
     }
     private fun initUI() {
         search_bioproducts = findViewById(R.id.search_bioproducts)
-        GlobalScope.launch {
-            bioproducts = bioproduct_service.getBioproducts().body()!!
-            runOnUiThread{
-                bioproductsCategoriesAdapter = BioproductsCategoriesAdapter(bioproductCategories) { position -> updateBioproductsCategories(position)}
-                bioproducts_categories_rv.layoutManager = LinearLayoutManager(this@BioproductsActivity, LinearLayoutManager.HORIZONTAL, false)
-                bioproducts_categories_rv.adapter = bioproductsCategoriesAdapter
+        lifecycleScope.launch(Dispatchers.IO) {
+            bioproducts = bioproduct_presenter.getBioproducts()
+            showBioproducts(bioproducts)
 
-                bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
-                bioproducts_rv.layoutManager = GridLayoutManager(this@BioproductsActivity, 2)
-                bioproducts_rv.adapter = bioproductsAdapter
-
-            }
         }
 
     }
@@ -178,5 +174,17 @@ class BioproductsActivity : AppCompatActivity() {
         bioproduct_dialog_back_buttom.setOnClickListener { dialog.hide() }
 
         dialog.show()
+    }
+
+    override fun showBioproducts(bioproducts: List<Bioproducts>) {
+        runOnUiThread{
+            bioproductsCategoriesAdapter = BioproductsCategoriesAdapter(bioproductCategories) { position -> updateBioproductsCategories(position)}
+            bioproducts_categories_rv.layoutManager = LinearLayoutManager(this@BioproductsActivity, LinearLayoutManager.HORIZONTAL, false)
+            bioproducts_categories_rv.adapter = bioproductsCategoriesAdapter
+            bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
+            bioproducts_rv.layoutManager = GridLayoutManager(this@BioproductsActivity, 2)
+            bioproducts_rv.adapter = bioproductsAdapter
+
+        }
     }
 }

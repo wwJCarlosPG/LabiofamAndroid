@@ -12,10 +12,5 @@
         android:title="Telegram"
         android:icon="@drawable/telegram">
     </item>
-    <item
-        android:id="@+id/phone"
-        android:title="Teléfono"
-        android:iconTint="@color/white"
-        android:icon="@drawable/phone">
-    </item>
+
 </menu>

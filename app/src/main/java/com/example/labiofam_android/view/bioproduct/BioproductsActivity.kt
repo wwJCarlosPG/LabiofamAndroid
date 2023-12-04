@@ -7,22 +7,25 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.labiofam_android.R
-import com.example.labiofam_android.Services.BioproductService
-import com.example.labiofam_android.Services.RetrofitHelper
-import com.example.labiofam_android.Services.SellPointService
-import com.example.labiofam_android.api_model.Bioproducts
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.coroutines.GlobalScope
+import com.example.labiofam_android.apiServices.BioproductService
+import com.example.labiofam_android.apiServices.RetrofitHelper
+import com.example.labiofam_android.apiModel.Bioproducts
+import com.example.labiofam_android.contract.BioproductContract
+import com.example.labiofam_android.model.BioproductModel
+import com.example.labiofam_android.presenter.BioproductPresenter
+import com.example.labiofam_android.view_interface.ViewInterface
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class BioproductsActivity : AppCompatActivity() {
+class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContract.BioproductView {
 
     private val bioproductCategories = listOf(
         BioproductsCategories.Other,
@@ -36,18 +39,20 @@ class BioproductsActivity : AppCompatActivity() {
     private lateinit var bioproductsCategoriesAdapter: BioproductsCategoriesAdapter
     private lateinit var  search_bioproducts:SearchView
     private lateinit var bioproducts_rv: RecyclerView
+    private var bioproduct_model = BioproductModel()
+    private var bioproduct_presenter = BioproductPresenter(this@BioproductsActivity, bioproduct_model)
     private lateinit var bioproductsAdapter: BioproductsAdapter
     val bioproduct_service = RetrofitHelper.getInstance().create(BioproductService::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bioproducts)
         initUI()
-        initComponent()
+        initComponents()
 
     }
 
 
-    private fun initComponent(){
+    override fun initComponents(){
         bioproducts_categories_rv = findViewById(R.id.bioproducts_categories_rv)
         bioproducts_rv = findViewById(R.id.bioproducts_rv)
         val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
@@ -55,7 +60,7 @@ class BioproductsActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.leftarrow)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 
         toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -87,11 +92,9 @@ class BioproductsActivity : AppCompatActivity() {
         })
     }
     fun getAllBioproducts(){
-        GlobalScope.launch {
-            val bioproducts_response = bioproduct_service.getBioproducts()
-            if(bioproducts_response.isSuccessful){
-                bioproducts = bioproducts_response.body()!!
-                Log.d("jc", "Entra a esta parte")
+        lifecycleScope.launch(Dispatchers.IO) {
+            val bioproducts = bioproduct_presenter.getBioproducts()
+            if(bioproducts.isNotEmpty()){
                 runOnUiThread{
                     bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
                     bioproductsAdapter.bioproducts = bioproducts
@@ -102,16 +105,14 @@ class BioproductsActivity : AppCompatActivity() {
 
             }
             else{
-                Log.d("jc", "Entra al else")
-                //show error message(definir una vista para errores).
+                showError("Error de conexión.")
             }
         }
     }
     fun getBySubstring(substring:String){
-        GlobalScope.launch {
-            val bioproducts_response = bioproduct_service.getBySubstring(substring)
-            if(bioproducts_response.isSuccessful){
-                bioproducts = bioproducts_response.body()!!
+        lifecycleScope.launch(Dispatchers.IO) {
+            val bioproducts = bioproduct_presenter.getBioproductBySubstring(substring)
+            if(bioproducts.isNotEmpty()){
                 Log.d("jc", "${bioproducts.size}")
                 runOnUiThread{
                     bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
@@ -124,27 +125,28 @@ class BioproductsActivity : AppCompatActivity() {
 
             }
             else{
-                Log.d("jc", "Entra al else")
-                //show error message(definir una vista para errores).
+
+                showError("Error de conexión")
             }
         }
     }
-    private fun initUI() {
+     override fun initUI() {
         search_bioproducts = findViewById(R.id.search_bioproducts)
-        GlobalScope.launch {
-            bioproducts = bioproduct_service.getBioproducts().body()!!
-            runOnUiThread{
-                bioproductsCategoriesAdapter = BioproductsCategoriesAdapter(bioproductCategories) { position -> updateBioproductsCategories(position)}
-                bioproducts_categories_rv.layoutManager = LinearLayoutManager(this@BioproductsActivity, LinearLayoutManager.HORIZONTAL, false)
-                bioproducts_categories_rv.adapter = bioproductsCategoriesAdapter
-
-                bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
-                bioproducts_rv.layoutManager = GridLayoutManager(this@BioproductsActivity, 2)
-                bioproducts_rv.adapter = bioproductsAdapter
-
+        lifecycleScope.launch(Dispatchers.IO) {
+            bioproducts = bioproduct_presenter.getBioproducts()
+            if(bioproducts.isNotEmpty()) {
+                showBioproducts(bioproducts)
+            }else{
+                showError("Error de conexión")
             }
+
         }
 
+    }
+
+
+    override fun showError(message: String) {
+        Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
     }
 
     private fun updateBioproductsCategories(position: Int){
@@ -161,22 +163,44 @@ class BioproductsActivity : AppCompatActivity() {
     }
 
     private fun navigateToBioproductDialog(bioproduct: Bioproducts) {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_bioproduct)
+        try {
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.dialog_bioproduct)
 
-        var bioproduct_dialog_name_tv: TextView = dialog.findViewById(R.id.bioproduct_dialog_name_tv)
-        var bioproduct_dialog_summary_tv: TextView = dialog.findViewById(R.id.bioproduct_dialog_summary_tv)
-        var bioproduct_dialog_description_tv: TextView = dialog.findViewById(R.id.bioproduct_dialog_description_tv)
-        var bioproduct_dialog_iv: ImageView = dialog.findViewById(R.id.bioproduct_dialog_iv)
-        var bioproduct_dialog_back_buttom: ImageView = dialog.findViewById((R.id.bioproduct_dialog_back_buttom))
+            var bioproduct_dialog_name_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_name_tv)
+            var bioproduct_dialog_summary_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_summary_tv)
+            var bioproduct_dialog_description_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_description_tv)
+            var bioproduct_dialog_iv: ImageView = dialog.findViewById(R.id.bioproduct_dialog_iv)
+            var bioproduct_dialog_back_buttom: ImageView =
+                dialog.findViewById((R.id.bioproduct_dialog_back_buttom))
 
-        bioproduct_dialog_name_tv.text = bioproduct.name.toString()
-        bioproduct_dialog_description_tv.text = bioproduct.specifications
-        bioproduct_dialog_summary_tv.text = bioproduct.summary
-        Glide.with(bioproduct_dialog_iv.context).load(bioproduct.image).into(bioproduct_dialog_iv)
+            bioproduct_dialog_name_tv.text = bioproduct.name.toString()
+            bioproduct_dialog_description_tv.text = bioproduct.specifications
+            bioproduct_dialog_summary_tv.text = bioproduct.summary
+            Glide.with(bioproduct_dialog_iv.context).load(bioproduct.image)
+                .into(bioproduct_dialog_iv)
 
-        bioproduct_dialog_back_buttom.setOnClickListener { dialog.hide() }
+            bioproduct_dialog_back_buttom.setOnClickListener { dialog.hide() }
 
-        dialog.show()
+            dialog.show()
+        }
+        catch (e:Exception){
+            showError("Error de conexión")
+        }
+    }
+
+    override fun showBioproducts(bioproducts: List<Bioproducts>) {
+        runOnUiThread{
+            bioproductsCategoriesAdapter = BioproductsCategoriesAdapter(bioproductCategories) { position -> updateBioproductsCategories(position)}
+            bioproducts_categories_rv.layoutManager = LinearLayoutManager(this@BioproductsActivity, LinearLayoutManager.HORIZONTAL, false)
+            bioproducts_categories_rv.adapter = bioproductsCategoriesAdapter
+            bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
+            bioproducts_rv.layoutManager = GridLayoutManager(this@BioproductsActivity, 2)
+            bioproducts_rv.adapter = bioproductsAdapter
+
+        }
     }
 }

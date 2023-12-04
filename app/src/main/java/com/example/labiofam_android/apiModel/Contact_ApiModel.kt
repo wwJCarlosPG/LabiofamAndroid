@@ -1,6 +1,5 @@
-package com.example.labiofam_android.api_model
+package com.example.labiofam_android.apiModel
 
-import android.util.Xml
 import com.google.gson.annotations.SerializedName
 
 //clase modelo de los contactos

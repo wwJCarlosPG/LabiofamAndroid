@@ -21,6 +21,7 @@
         android:id="@+id/error_dialog_iv"
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:src="@drawable/error"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +33,7 @@
         android:id="@+id/error_dialog_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="HAY ERROR MADANFAKA"></TextView>
+        android:text="Al parecer no hay datos que mostrar o su conexión es inestable"></TextView>
 
 
 

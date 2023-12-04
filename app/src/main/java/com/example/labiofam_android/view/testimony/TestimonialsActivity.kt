@@ -62,14 +62,16 @@ class TestimonialsActivity:AppCompatActivity() {
 
     private fun initVideoPlayer() {
         //mediaController = MediaController(this)
-        mediaController = MediaController(this@TestimonialsActivity)
-        mediaController.setAnchorView(testimony_video)
-        val uri:Uri = Uri.parse("${videoTestimonials[current_index].path}")
-        testimony_video.setMediaController(mediaController)
-        testimony_video.setVideoURI(uri)
-        testimony_video.requestFocus()
-        testimony_video.start()
+        if(videoTestimonials.isNotEmpty()) {
+            mediaController = MediaController(this@TestimonialsActivity)
+            mediaController.setAnchorView(testimony_video)
+            val uri: Uri = Uri.parse("${videoTestimonials[current_index].path}")
+            testimony_video.setMediaController(mediaController)
+            testimony_video.setVideoURI(uri)
+            testimony_video.requestFocus()
+            testimony_video.start()
         }
+    }
 
 
         fun nextVideo(view: View) {

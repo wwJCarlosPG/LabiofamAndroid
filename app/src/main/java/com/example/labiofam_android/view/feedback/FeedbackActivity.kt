@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
@@ -12,11 +13,14 @@ import com.example.labiofam_android.R
 import com.example.labiofam_android.Services.FeedbackService
 import com.example.labiofam_android.Services.RetrofitHelper
 import com.example.labiofam_android.Services.SellPointService
+import com.example.labiofam_android.contract.FeedbackContract
+import com.example.labiofam_android.model.FeedbackModel
+import com.example.labiofam_android.presenter.FeedbackPresenter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class FeedbackActivity: AppCompatActivity(){
+class FeedbackActivity: AppCompatActivity(),FeedbackContract.FeedbackView{
 
 
     private  lateinit var editText_message: EditText
@@ -25,7 +29,8 @@ class FeedbackActivity: AppCompatActivity(){
     private lateinit var editText_phone: EditText
     private lateinit var send_btn:Button
     val feedback_service = RetrofitHelper.getInstance().create(FeedbackService::class.java)
-
+    val feedback_model = FeedbackModel()
+    val feedback_presenter = FeedbackPresenter(this@FeedbackActivity, feedback_model)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feedback)
@@ -56,23 +61,22 @@ class FeedbackActivity: AppCompatActivity(){
     }
 
     fun sendEmail(view: View) {
-        Log.d("jc","Entro al metodo")
         if(editText_name.text!=null && editText_mail.text != null &&
             editText_phone.text != null && editText_message.text!=null){
-            //tengo que usar global scope aqui al parecer.
             GlobalScope.launch {
-                Log.d("jc","Entro a la corrutina")
                 delay(7000)
-                var response = feedback_service.sendEmail("Quejas y Suegerencias",
+                var response = feedback_presenter.sendMail("Quejas y Suegerencias",
                     "Mensaje: ${editText_message.text}, Nombre: ${editText_name.text}, " +
                             "Telefono: ${editText_phone.text}, Correo: ${editText_mail.text}")
-                if(response.isSuccessful){
-                    Log.d("jc", "is successful")
-                }
+                showToast(response)
             }
 
-            Log.d("jc", "Sirvio esta talla")
+        }
+    }
 
+    override fun showToast(text:String) {
+        runOnUiThread{
+            Toast.makeText(this, "$text", Toast.LENGTH_SHORT).show()
         }
     }
 }

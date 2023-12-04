@@ -11,15 +11,21 @@ import com.example.labiofam_android.Services.ContactService
 import com.example.labiofam_android.Services.RetrofitHelper
 import com.example.labiofam_android.Services.SellPointService
 import com.example.labiofam_android.api_model.Contact
+import com.example.labiofam_android.contract.ContactContract
+import com.example.labiofam_android.model.ContactModel
+import com.example.labiofam_android.presenter.ContactPresenter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class ContactsViewActivity : AppCompatActivity() {
+class ContactsViewActivity : AppCompatActivity(), ContactContract.ContactView {
 
     private  lateinit var contactsAdapter: ContactsAdapter
 
     private lateinit var rvContacts: RecyclerView
-    val contact_service = RetrofitHelper.getInstance().create(ContactService::class.java)
+    val contact_model = ContactModel()
+    var contact_presenter:ContactContract.ContactPresenter = ContactPresenter(this@ContactsViewActivity,
+        contact_model)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts_view)
@@ -43,20 +49,28 @@ class ContactsViewActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
-
         var contacts:List<Contact> = listOf()
-        GlobalScope.launch {
-            if (contact_service.getContacts().isSuccessful){
-                contacts = contact_service.getContacts().body()!!
-                runOnUiThread {
-                    contactsAdapter = ContactsAdapter(contacts)
-                    rvContacts.layoutManager = LinearLayoutManager(this@ContactsViewActivity)
-                    rvContacts.adapter = contactsAdapter
-                }
+        lifecycleScope.launch(Dispatchers.IO) {
+            contacts = contact_presenter.getContacts()
+            if(contacts.isNotEmpty()){
+                showContacts(contacts)
             }
             else{
-                //show error message.
+                //showError.
             }
         }
+
     }
+
+
+
+
+    override fun showContacts(contacts:List<Contact>) {
+        runOnUiThread {
+            contactsAdapter = ContactsAdapter(contacts)
+            rvContacts.layoutManager = LinearLayoutManager(this@ContactsViewActivity)
+            rvContacts.adapter = contactsAdapter
+        }
+    }
+
 }

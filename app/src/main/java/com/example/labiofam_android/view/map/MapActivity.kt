@@ -50,8 +50,6 @@ class MapActivity : AppCompatActivity(),MapContract.MapView, SellPointToBioprodu
     private lateinit var mGoogleMap: GoogleMap
     private lateinit var searchView:SearchView
     private lateinit var toolbar:Toolbar
-    val sellPoint_service = RetrofitHelper.getInstance().create(SellPointService::class.java)
-    val bioproduct_service = RetrofitHelper.getInstance().create(BioproductService::class.java)
     val map_model:MapContract.MapModel = MapModel()
     val sellPointToBioproductModel:SellPointToBioproductContract.SellPointToBioproductModel = SellPointToBioproductModel()
     val map_presenter = MapPresenter(this@MapActivity, map_model)

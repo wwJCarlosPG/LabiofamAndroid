@@ -1,6 +1,6 @@
 package com.example.labiofam_android.contract
 
-import com.example.labiofam_android.api_model.SellPoint
+import com.example.labiofam_android.apiModel.SellPoint
 import retrofit2.Response
 
 interface MapContract {

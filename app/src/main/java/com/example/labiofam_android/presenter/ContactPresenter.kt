@@ -1,6 +1,6 @@
 package com.example.labiofam_android.presenter
 
-import com.example.labiofam_android.api_model.Contact
+import com.example.labiofam_android.apiModel.Contact
 import com.example.labiofam_android.contract.ContactContract
 
 class ContactPresenter(contactView:ContactContract.ContactView, contactModel: ContactContract.ContactModel):ContactContract.ContactPresenter {

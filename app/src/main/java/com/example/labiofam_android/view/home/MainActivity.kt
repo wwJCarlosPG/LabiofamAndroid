@@ -1,12 +1,16 @@
 package com.example.labiofam_android.view.home
 
+import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -14,7 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.labiofam_android.R
-import com.example.labiofam_android.api_model.Bioproducts
+import com.example.labiofam_android.apiModel.Bioproducts
 import com.example.labiofam_android.contract.MainContract
 import com.example.labiofam_android.model.MainModel
 import com.example.labiofam_android.presenter.MainPresenter
@@ -28,6 +32,7 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.example.labiofam_android.view_interface.ViewInterface
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), MainContract.View,ViewInterface, NavigationView.OnNavigationItemSelectedListener  {
 
@@ -104,40 +109,43 @@ class MainActivity : AppCompatActivity(), MainContract.View,ViewInterface, Navig
 
 
     override fun showRandomBioproducts(bioproducts: MutableList<Bioproducts>) {
-        lifecycleScope.launch(Dispatchers.IO){
-            runOnUiThread{
-                Glide.with(random_product_iv1.context).load(bioproducts[0].image).into(random_product_iv1)
-                Glide.with(random_product_iv2.context).load(bioproducts[1].image).into(random_product_iv2)
-                Glide.with(random_product_iv3.context).load(bioproducts[2].image).into(random_product_iv3)
+        try {
+            lifecycleScope.launch(Dispatchers.IO) {
+                runOnUiThread {
+                    Glide.with(random_product_iv1.context).load(bioproducts[0].image)
+                        .into(random_product_iv1)
+                    Glide.with(random_product_iv2.context).load(bioproducts[1].image)
+                        .into(random_product_iv2)
+                    Glide.with(random_product_iv3.context).load(bioproducts[2].image)
+                        .into(random_product_iv3)
+                }
             }
+        }
+        catch (e:Exception){
+            showError("Error de conexión")
         }
     }
 
-    override fun showError(message: String) {
-        runOnUiThread{
-            Toast.makeText(this@MainActivity, bioproducts[0].name, Toast.LENGTH_SHORT).show()
-        }
-    }
+
 
     override fun initUI() {
 
         lifecycleScope.launch(Dispatchers.IO){
             bioproducts = main_presenter.getRandomBioproducts()
-            showRandomBioproducts(bioproducts)
+            if(bioproducts.isNotEmpty()){
+                showRandomBioproducts(bioproducts)
+            }
+            else{
+                showError("Error de conexión")
+            }
 
         }
-        //val dialog = Dialog(this@MainActivity)
-                //dialog.setContentView(R.layout.dialog_bioproduct)
-                //var error_dialog_tv: TextView = dialog.findViewById(R.id.error_dialog_tv)
-                //var error_dialog_backbtn = dialog.findViewById<ImageView>(R.id.error_dialog_back_btn)
-                //error_dialog_tv.text = "ERROR MADANFAKA"
-                //error_dialog_backbtn.setOnClickListener { dialog.hide() }
 
-                //dialog.show()
 
     }
 
     override fun initComponents() {
+        try{
         val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
         random_product_iv1 = findViewById(R.id.random_iv1)
@@ -155,7 +163,35 @@ class MainActivity : AppCompatActivity(), MainContract.View,ViewInterface, Navig
 
         val navigationView:NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.nav_bottom_menu)
+        bottomNavigation.setOnItemSelectedListener {selectedItem->
+            when(selectedItem.itemId){
+                R.id.telegram -> {
+                    val telegramUsername = "JCarlosPG00"
 
+                    val telegramIntent = Intent(Intent.ACTION_VIEW)
+                    telegramIntent.data = Uri.parse("https://t.me/$telegramUsername")
+                    telegramIntent.setPackage("org.telegram.messenger")
+                    try {
+                        startActivity(telegramIntent)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(this, "La aplicación de Telegram no está instalada", Toast.LENGTH_SHORT).show()
+                    }
+                    true
+                }
+
+                else -> {false
+                }
+            }
+
+            }
+        }
+        catch (e:Exception){
+            showError("Error de conexión")
+        }
+    }
+    override fun showError(message: String) {
+        Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
     }
 
 

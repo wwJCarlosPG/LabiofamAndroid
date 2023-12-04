@@ -1,6 +1,6 @@
 package com.example.labiofam_android.presenter
 
-import com.example.labiofam_android.api_model.SellPoint
+import com.example.labiofam_android.apiModel.SellPoint
 import com.example.labiofam_android.contract.MapContract
 
 class MapPresenter(mapView: MapContract.MapView,mapModel:MapContract.MapModel): MapContract.MapPresenter {

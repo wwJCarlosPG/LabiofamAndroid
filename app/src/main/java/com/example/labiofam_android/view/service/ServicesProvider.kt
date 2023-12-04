@@ -1,6 +1,6 @@
 package com.example.labiofam_android.view.service
 
-import com.example.labiofam_android.api_model.Service
+import com.example.labiofam_android.apiModel.Service
 
 class ServicesProvider {
     companion object{

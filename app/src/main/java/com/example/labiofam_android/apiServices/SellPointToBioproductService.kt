@@ -1,9 +1,7 @@
-package com.example.labiofam_android.Services
+package com.example.labiofam_android.apiServices
 
-import com.example.labiofam_android.api_model.Bioproducts
-import com.example.labiofam_android.api_model.SellPoint
+import com.example.labiofam_android.apiModel.Bioproducts
 import retrofit2.Response
-import retrofit2.http.Field
 import retrofit2.http.GET
 import retrofit2.http.Query
 

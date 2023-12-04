@@ -7,7 +7,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.labiofam_android.R
-import com.example.labiofam_android.api_model.Bioproducts
+import com.example.labiofam_android.apiModel.Bioproducts
 
 class BioproductsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.labiofam_android.R
-import com.example.labiofam_android.api_model.Bioproducts
+import com.example.labiofam_android.apiModel.Bioproducts
 
 class BioproductsAdapter(var bioproducts: List<Bioproducts>,
                          private val onItemSelected:(Bioproducts) -> Unit) : RecyclerView.Adapter<BioproductsViewHolder>() {

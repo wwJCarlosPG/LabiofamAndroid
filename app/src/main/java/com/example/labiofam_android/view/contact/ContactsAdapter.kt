@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.labiofam_android.R
-import com.example.labiofam_android.api_model.Contact
+import com.example.labiofam_android.apiModel.Contact
 
 class ContactsAdapter(private val contacts: List<Contact>): RecyclerView.Adapter<ContactsViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsViewHolder {

@@ -1,6 +1,6 @@
-package com.example.labiofam_android.Services
+package com.example.labiofam_android.apiServices
 
-import com.example.labiofam_android.api_model.Contact
+import com.example.labiofam_android.apiModel.Contact
 import retrofit2.Response
 import retrofit2.http.GET
 

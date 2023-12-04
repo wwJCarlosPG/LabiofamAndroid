@@ -1,6 +1,6 @@
 package com.example.labiofam_android.presenter
 
-import com.example.labiofam_android.api_model.Bioproducts
+import com.example.labiofam_android.apiModel.Bioproducts
 import com.example.labiofam_android.contract.MainContract
 
 class MainPresenter(mainView: MainContract.View,

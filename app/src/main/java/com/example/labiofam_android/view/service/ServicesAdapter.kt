@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.labiofam_android.R
-import com.example.labiofam_android.api_model.Service
+import com.example.labiofam_android.apiModel.Service
 
 
 class ServicesAdapter(private val services: List<Service>): RecyclerView.Adapter<ServicesViewHolder>(){

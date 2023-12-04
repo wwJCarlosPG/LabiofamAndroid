@@ -1,6 +1,6 @@
 package com.example.labiofam_android.contract
 
-import com.example.labiofam_android.api_model.Bioproducts
+import com.example.labiofam_android.apiModel.Bioproducts
 import retrofit2.Response
 
 interface MainContract {

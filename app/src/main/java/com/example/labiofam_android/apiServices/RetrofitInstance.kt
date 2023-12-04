@@ -1,4 +1,4 @@
-package com.example.labiofam_android.Services
+package com.example.labiofam_android.apiServices
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

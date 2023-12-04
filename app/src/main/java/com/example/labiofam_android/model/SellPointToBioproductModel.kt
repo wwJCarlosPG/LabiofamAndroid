@@ -1,9 +1,8 @@
 package com.example.labiofam_android.model
 
-import com.example.labiofam_android.Services.RetrofitHelper
-import com.example.labiofam_android.Services.SellPointToBioproductService
-import com.example.labiofam_android.api_model.Bioproducts
-import com.example.labiofam_android.api_model.SellPoint
+import com.example.labiofam_android.apiServices.RetrofitHelper
+import com.example.labiofam_android.apiServices.SellPointToBioproductService
+import com.example.labiofam_android.apiModel.Bioproducts
 import com.example.labiofam_android.contract.SellPointToBioproductContract
 import retrofit2.Response
 

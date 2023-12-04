@@ -1,6 +1,6 @@
 package com.example.labiofam_android.contract
 
-import com.example.labiofam_android.api_model.Contact
+import com.example.labiofam_android.apiModel.Contact
 import retrofit2.Response
 
 interface ContactContract {

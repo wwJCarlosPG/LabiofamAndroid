@@ -1,24 +1,25 @@
 package com.example.labiofam_android.view.contact
 
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.labiofam_android.R
-import com.example.labiofam_android.Services.ContactService
-import com.example.labiofam_android.Services.RetrofitHelper
-import com.example.labiofam_android.Services.SellPointService
-import com.example.labiofam_android.api_model.Contact
+import com.example.labiofam_android.apiModel.Contact
 import com.example.labiofam_android.contract.ContactContract
 import com.example.labiofam_android.model.ContactModel
 import com.example.labiofam_android.presenter.ContactPresenter
+import com.example.labiofam_android.view_interface.ViewInterface
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class ContactsViewActivity : AppCompatActivity(), ContactContract.ContactView {
+class ContactsViewActivity : ViewInterface,AppCompatActivity(), ContactContract.ContactView {
 
     private  lateinit var contactsAdapter: ContactsAdapter
 
@@ -34,21 +35,25 @@ class ContactsViewActivity : AppCompatActivity(), ContactContract.ContactView {
     }
 
 
-    private fun initComponents(){
+    override fun initComponents(){
         rvContacts = findViewById(R.id.rv_Contacts)
         val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.leftarrow)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
     }
 
-    private fun initUI() {
+    override fun showError(message: String) {
+        Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun initUI() {
         var contacts:List<Contact> = listOf()
         lifecycleScope.launch(Dispatchers.IO) {
             contacts = contact_presenter.getContacts()
@@ -56,7 +61,7 @@ class ContactsViewActivity : AppCompatActivity(), ContactContract.ContactView {
                 showContacts(contacts)
             }
             else{
-                //showError.
+                showError("Error de conexión")
             }
         }
 

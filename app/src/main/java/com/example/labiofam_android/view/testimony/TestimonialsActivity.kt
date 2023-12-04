@@ -41,7 +41,7 @@ class TestimonialsActivity:AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.leftarrow)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 
         toolbar.setNavigationOnClickListener {
             onBackPressed()

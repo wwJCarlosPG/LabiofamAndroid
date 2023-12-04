@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,20 +15,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.labiofam_android.R
-import com.example.labiofam_android.Services.BioproductService
-import com.example.labiofam_android.Services.RetrofitHelper
-import com.example.labiofam_android.Services.SellPointService
-import com.example.labiofam_android.api_model.Bioproducts
+import com.example.labiofam_android.apiServices.BioproductService
+import com.example.labiofam_android.apiServices.RetrofitHelper
+import com.example.labiofam_android.apiModel.Bioproducts
 import com.example.labiofam_android.contract.BioproductContract
 import com.example.labiofam_android.model.BioproductModel
 import com.example.labiofam_android.presenter.BioproductPresenter
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.example.labiofam_android.view_interface.ViewInterface
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class BioproductsActivity : AppCompatActivity(), BioproductContract.BioproductView {
+class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContract.BioproductView {
 
     private val bioproductCategories = listOf(
         BioproductsCategories.Other,
@@ -49,12 +47,12 @@ class BioproductsActivity : AppCompatActivity(), BioproductContract.BioproductVi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bioproducts)
         initUI()
-        initComponent()
+        initComponents()
 
     }
 
 
-    private fun initComponent(){
+    override fun initComponents(){
         bioproducts_categories_rv = findViewById(R.id.bioproducts_categories_rv)
         bioproducts_rv = findViewById(R.id.bioproducts_rv)
         val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
@@ -62,7 +60,7 @@ class BioproductsActivity : AppCompatActivity(), BioproductContract.BioproductVi
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.leftarrow)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 
         toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -107,8 +105,7 @@ class BioproductsActivity : AppCompatActivity(), BioproductContract.BioproductVi
 
             }
             else{
-                Log.d("jc", "Entra al else")
-                //show error message(definir una vista para errores).
+                showError("Error de conexión.")
             }
         }
     }
@@ -129,18 +126,27 @@ class BioproductsActivity : AppCompatActivity(), BioproductContract.BioproductVi
             }
             else{
 
-                //show error message(definir una vista para errores).
+                showError("Error de conexión")
             }
         }
     }
-    private fun initUI() {
+     override fun initUI() {
         search_bioproducts = findViewById(R.id.search_bioproducts)
         lifecycleScope.launch(Dispatchers.IO) {
             bioproducts = bioproduct_presenter.getBioproducts()
-            showBioproducts(bioproducts)
+            if(bioproducts.isNotEmpty()) {
+                showBioproducts(bioproducts)
+            }else{
+                showError("Error de conexión")
+            }
 
         }
 
+    }
+
+
+    override fun showError(message: String) {
+        Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
     }
 
     private fun updateBioproductsCategories(position: Int){
@@ -157,23 +163,33 @@ class BioproductsActivity : AppCompatActivity(), BioproductContract.BioproductVi
     }
 
     private fun navigateToBioproductDialog(bioproduct: Bioproducts) {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_bioproduct)
+        try {
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.dialog_bioproduct)
 
-        var bioproduct_dialog_name_tv: TextView = dialog.findViewById(R.id.bioproduct_dialog_name_tv)
-        var bioproduct_dialog_summary_tv: TextView = dialog.findViewById(R.id.bioproduct_dialog_summary_tv)
-        var bioproduct_dialog_description_tv: TextView = dialog.findViewById(R.id.bioproduct_dialog_description_tv)
-        var bioproduct_dialog_iv: ImageView = dialog.findViewById(R.id.bioproduct_dialog_iv)
-        var bioproduct_dialog_back_buttom: ImageView = dialog.findViewById((R.id.bioproduct_dialog_back_buttom))
+            var bioproduct_dialog_name_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_name_tv)
+            var bioproduct_dialog_summary_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_summary_tv)
+            var bioproduct_dialog_description_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_description_tv)
+            var bioproduct_dialog_iv: ImageView = dialog.findViewById(R.id.bioproduct_dialog_iv)
+            var bioproduct_dialog_back_buttom: ImageView =
+                dialog.findViewById((R.id.bioproduct_dialog_back_buttom))
 
-        bioproduct_dialog_name_tv.text = bioproduct.name.toString()
-        bioproduct_dialog_description_tv.text = bioproduct.specifications
-        bioproduct_dialog_summary_tv.text = bioproduct.summary
-        Glide.with(bioproduct_dialog_iv.context).load(bioproduct.image).into(bioproduct_dialog_iv)
+            bioproduct_dialog_name_tv.text = bioproduct.name.toString()
+            bioproduct_dialog_description_tv.text = bioproduct.specifications
+            bioproduct_dialog_summary_tv.text = bioproduct.summary
+            Glide.with(bioproduct_dialog_iv.context).load(bioproduct.image)
+                .into(bioproduct_dialog_iv)
 
-        bioproduct_dialog_back_buttom.setOnClickListener { dialog.hide() }
+            bioproduct_dialog_back_buttom.setOnClickListener { dialog.hide() }
 
-        dialog.show()
+            dialog.show()
+        }
+        catch (e:Exception){
+            showError("Error de conexión")
+        }
     }
 
     override fun showBioproducts(bioproducts: List<Bioproducts>) {

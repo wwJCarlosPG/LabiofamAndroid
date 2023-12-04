@@ -1,10 +1,9 @@
 package com.example.labiofam_android.model
 
-import com.example.labiofam_android.Services.FeedbackService
-import com.example.labiofam_android.Services.RetrofitHelper
+import com.example.labiofam_android.apiServices.FeedbackService
+import com.example.labiofam_android.apiServices.RetrofitHelper
 import com.example.labiofam_android.contract.FeedbackContract
 import retrofit2.Response
-import retrofit2.create
 
 class FeedbackModel:FeedbackContract.FeedbackModel {
     var feedback_service = RetrofitHelper.getInstance().create(FeedbackService::class.java)

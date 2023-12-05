@@ -17,15 +17,17 @@
         >
 
     </ImageView>
-    
+
     <ImageView
         android:id="@+id/bioproduct_dialog_iv"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="212dp"
+        android:layout_height="237dp"
+        android:layout_marginVertical="16dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginVertical="16dp">
+        app:layout_constraintHorizontal_bias="0.68"
+        app:layout_constraintStart_toEndOf="@+id/bioproduct_dialog_back_buttom"
+        app:layout_constraintTop_toTopOf="parent">
 
     </ImageView>
 
@@ -33,6 +35,7 @@
         android:id="@+id/bioproduct_dialog_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/telex"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bioproduct_dialog_iv"
@@ -46,12 +49,14 @@
         android:id="@+id/bioproduct_dialog_summary_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bioproduct_dialog_name_tv"
-        tools:text="Precio"
+        android:layout_marginVertical="8dp"
+        android:layout_marginTop="88dp"
+        android:fontFamily="@font/telex"
         android:textSize="16sp"
-        android:layout_marginVertical="8dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bioproduct_dialog_name_tv"
+        tools:text="Precio">
 
     </TextView>
 
@@ -59,12 +64,16 @@
         android:id="@+id/bioproduct_dialog_description_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bioproduct_dialog_summary_tv"
-        tools:text="Descripcion"
+        android:layout_marginVertical="8dp"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/telex"
         android:textSize="16sp"
-        android:layout_marginVertical="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bioproduct_dialog_summary_tv"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="Descripcion">
 
     </TextView>
 

@@ -11,10 +11,10 @@ class MainPresenter(mainView: MainContract.View,
     override suspend fun getRandomBioproducts():MutableList<Bioproducts> {
             var response = mainModel.getRandomBioproducts()
             if(response.isSuccessful){
-                var rs1 = mainModel.getBioproductsByName("Aceite Random 1")
-                var rs2 = mainModel.getBioproductsByName("Aceite Random 2")
-                var rs3 = mainModel.getBioproductsByName("Aceite Random 3")
-                result= mutableListOf(rs1.body()!!, rs2.body()!!, rs3.body()!!)
+                var rs1 = response.body()!![0]
+                var rs2 = response.body()!![1]
+                var rs3 = response.body()!![2]
+                result= mutableListOf(rs1,rs2,rs3)
                 return (result)
             }
             else{

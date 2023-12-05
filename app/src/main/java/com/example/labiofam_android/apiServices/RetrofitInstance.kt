@@ -13,7 +13,7 @@ object RetrofitHelper {
     fun getInstance(): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
-            .callFactory(OkHttpClient.Builder().callTimeout(30,TimeUnit.SECONDS).build())
+            .callFactory(OkHttpClient.Builder().callTimeout(60,TimeUnit.SECONDS).build())
             .build()
         // we need to add converter factory to
         // convert JSON object to Java object

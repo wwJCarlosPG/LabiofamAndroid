@@ -2,6 +2,7 @@ package com.example.labiofam_android.presenter
 
 import com.example.labiofam_android.apiModel.Bioproducts
 import com.example.labiofam_android.contract.MainContract
+import kotlin.random.Random
 
 class MainPresenter(mainView: MainContract.View,
                     mainModel: MainContract.Model): MainContract.Presenter {
@@ -11,10 +12,11 @@ class MainPresenter(mainView: MainContract.View,
     override suspend fun getRandomBioproducts():MutableList<Bioproducts> {
             var response = mainModel.getRandomBioproducts()
             if(response.isSuccessful){
-                var rs1 = response.body()!![0]
-                var rs2 = response.body()!![1]
-                var rs3 = response.body()!![2]
-                result= mutableListOf(rs1,rs2,rs3)
+                val bioproducts = response.body()
+                var random_index1 = Random.nextInt(bioproducts!!.size)
+                var random_index2 = Random.nextInt(bioproducts!!.size)
+                var random_index3 = Random.nextInt(bioproducts!!.size)
+                result= mutableListOf(bioproducts[random_index1], bioproducts[random_index2], bioproducts[random_index3])
                 return (result)
             }
             else{

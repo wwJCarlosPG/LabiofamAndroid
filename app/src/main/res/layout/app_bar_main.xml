@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/labiofamColor"
-            app:title="Labiofam"
+            app:title="Bienvenidos a nuestra app!"
             android:fontFamily="@font/cambay"
             app:navigationIcon="@drawable/menu2"
             app:titleTextColor="@color/white"

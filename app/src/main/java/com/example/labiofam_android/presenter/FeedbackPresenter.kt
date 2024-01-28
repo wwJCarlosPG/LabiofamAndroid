@@ -8,11 +8,10 @@ class FeedbackPresenter(feedbackView: FeedbackContract.FeedbackView,
     private var feedbackView = feedbackView
     override suspend fun sendMail(subject: String, message: String): String {
         var res = feedbackModel.sendMail(subject, message)
-        if(res.isSuccessful){
-            return "Enviado con éxito"
-        }
-        else{
-            return "Fallo en el envio"
+        return if(res.isSuccessful){
+            "Enviado con éxito"
+        } else{
+            "Fallo en el envio"
         }
     }
 

@@ -50,7 +50,7 @@ class TestimonialsActivity:AppCompatActivity() {
 
     private fun initUI() {
         videoTestimonials = mutableListOf(
-            //VideoTestimony("android.resource://$packageName/${R.raw.video2}"),
+            VideoTestimony("android.resource://$packageName/${R.raw.video}")
             //VideoTestimony("android.resource://$packageName/${R.raw.video2}")
         )
         testimonials_adapter = TestimonialsAdapter(TestimonialsProvider.imageTestimonials)

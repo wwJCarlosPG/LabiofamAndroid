@@ -229,7 +229,7 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
                 initSellPointDialog(dialog, sellPoint)
                 var spinner: Spinner = dialog.findViewById(R.id.bioproducts_spinner)
                 var items = mutableListOf<String>()
-                items.add("Productos disponibles")
+                items.add("Productos")
                 bioproductsBySellPoint.forEach{biop->
                      items.add(biop.name)
                 }

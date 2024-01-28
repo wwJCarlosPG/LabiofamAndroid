@@ -42,7 +42,6 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
     private var bioproduct_model = BioproductModel()
     private var bioproduct_presenter = BioproductPresenter(this@BioproductsActivity, bioproduct_model)
     private lateinit var bioproductsAdapter: BioproductsAdapter
-    val bioproduct_service = RetrofitHelper.getInstance().create(BioproductService::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bioproducts)
@@ -68,24 +67,23 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
 
         search_bioproducts!!.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextChange(newText: String?): Boolean {
-                var location = newText.toString()
-                Log.d("jc", "djsakdfj")
-                if(location==""){
+                var query = newText.toString()
+                if(query==""){
                     getAllBioproducts()
                 }
                 else{
-                    getBySubstring(location)
+                    getBySubstring(query)
                 }
                 return true
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-                var location = query.toString()
-                if(location==""){
+                var query = query.toString()
+                if(query==""){
                     getAllBioproducts()
                 }
                 else{
-                    getBySubstring(location)
+                    getBySubstring(query)
                 }
                 return true
             }
@@ -98,36 +96,49 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
                 runOnUiThread{
                     bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
                     bioproductsAdapter.bioproducts = bioproducts
-                    Log.d("cantidad","${bioproductsAdapter.itemCount.toString()}")
                     bioproductsAdapter.notifyDataSetChanged()
                     bioproducts_rv.adapter = bioproductsAdapter
                 }
 
             }
             else{
-                showError("Error de conexión.")
+                runOnUiThread{
+                bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
+                bioproductsAdapter.bioproducts = bioproducts
+                bioproductsAdapter.notifyDataSetChanged()
+                bioproducts_rv.adapter = bioproductsAdapter
+                showError("No hay bioproductos que mostrar.")
+                }
+
             }
         }
     }
     fun getBySubstring(substring:String){
         lifecycleScope.launch(Dispatchers.IO) {
             val bioproducts = bioproduct_presenter.getBioproductBySubstring(substring)
-            if(bioproducts.isNotEmpty()){
-                Log.d("jc", "${bioproducts.size}")
-                runOnUiThread{
-                    bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
-                    bioproductsAdapter.bioproducts = bioproducts
-                    Log.d("cantidad","${bioproductsAdapter.itemCount.toString()}")
-                    bioproductsAdapter.notifyDataSetChanged()
-                    bioproducts_rv.adapter = bioproductsAdapter
-                    //no modifica los adapter
+            Log.d("jc", "${bioproducts.size}")
+            runOnUiThread{
+                if(bioproducts.isNotEmpty()){
+                bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
+                bioproductsAdapter.bioproducts = bioproducts
+                Log.d("cantidad","${bioproductsAdapter.itemCount.toString()}")
+                bioproductsAdapter.notifyDataSetChanged()
+                bioproducts_rv.adapter = bioproductsAdapter
+                //no modifica los adapter
                 }
-
+                else{
+                    runOnUiThread{
+                        bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
+                        bioproductsAdapter.bioproducts = bioproducts
+                        bioproductsAdapter.notifyDataSetChanged()
+                        bioproducts_rv.adapter = bioproductsAdapter
+                        showError("No hay bioproductos que mostrar.")
+                    }
+                }
             }
-            else{
 
-                showError("Error de conexión")
-            }
+
+
         }
     }
      override fun initUI() {
@@ -193,14 +204,14 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
     }
 
     override fun showBioproducts(bioproducts: List<Bioproducts>) {
-        runOnUiThread{
-            bioproductsCategoriesAdapter = BioproductsCategoriesAdapter(bioproductCategories) { position -> updateBioproductsCategories(position)}
+        runOnUiThread {
+            bioproductsCategoriesAdapter = BioproductsCategoriesAdapter(bioproductCategories) { position -> updateBioproductsCategories(position) }
             bioproducts_categories_rv.layoutManager = LinearLayoutManager(this@BioproductsActivity, LinearLayoutManager.HORIZONTAL, false)
             bioproducts_categories_rv.adapter = bioproductsCategoriesAdapter
-            bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected ={ navigateToBioproductDialog(it) })
+
+            bioproductsAdapter = BioproductsAdapter(bioproducts, onItemSelected = { navigateToBioproductDialog(it) })
             bioproducts_rv.layoutManager = GridLayoutManager(this@BioproductsActivity, 2)
             bioproducts_rv.adapter = bioproductsAdapter
-
         }
     }
 }

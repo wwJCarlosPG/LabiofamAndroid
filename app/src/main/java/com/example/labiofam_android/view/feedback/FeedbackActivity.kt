@@ -2,6 +2,7 @@ package com.example.labiofam_android.view.feedback
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -11,6 +12,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.labiofam_android.R
+import com.example.labiofam_android.apiServices.FeedbackService
+import com.example.labiofam_android.apiServices.RetrofitHelper
 import com.example.labiofam_android.contract.FeedbackContract
 import com.example.labiofam_android.model.FeedbackModel
 import com.example.labiofam_android.presenter.FeedbackPresenter
@@ -62,7 +65,8 @@ class FeedbackActivity: ViewInterface,AppCompatActivity(),FeedbackContract.Feedb
     }
 
     fun sendEmail(view: View) {
-            if (editText_name.text != null && editText_mail.text != null &&
+
+        if (editText_name.text != null && editText_mail.text != null &&
                 editText_phone.text != null && editText_message.text != null
             ) {
                 GlobalScope.launch {
@@ -71,10 +75,12 @@ class FeedbackActivity: ViewInterface,AppCompatActivity(),FeedbackContract.Feedb
                     var response = feedback_presenter.sendMail(
                         "Quejas y Suegerencias",
                         "Mensaje: ${editText_message.text}, Nombre: ${editText_name.text}, " +
-                                "Telefono: ${editText_phone.text}, Correo: ${editText_mail.text}"
+                          "Telefono: ${editText_phone.text}, Correo: ${editText_mail.text}"
                     )
                     showToast(response)
+
                 }
+
 
             }
     }

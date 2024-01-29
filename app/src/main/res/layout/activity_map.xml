@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:elevation="5dp"
-        android:fontFamily="@font/telex"
+        android:fontFamily="@font/cambay"
         android:iconifiedByDefault="false"
         android:queryHint="Escriba un producto"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -56,7 +56,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.163"
-        android:fontFamily="@font/telex"
+        android:fontFamily="@font/cambay"
         app:layout_constraintStart_toEndOf="@+id/checkBox_address"
         app:layout_constraintTop_toBottomOf="@+id/search_map"
         app:layout_constraintVertical_bias="0.014">
@@ -69,7 +69,7 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="8dp"
         android:text="Por dirección"
-        android:fontFamily="@font/telex"
+        android:fontFamily="@font/cambay"
         app:layout_constraintStart_toEndOf="@+id/checkBox"
         app:layout_constraintTop_toBottomOf="@+id/search_map"
         tools:ignore="UnknownId" />

@@ -13,4 +13,7 @@
     <string name="navigation_drawer_open">Abrir</string>
     <string name="navigation_drawer_close">Cerrar</string>
     <string name="phone_number_text">Número de Teléfono</string>
+    <string name="facebook_account">JCarlosPG00</string>
+    <string name="linkedin_account"></string>
+    <string name="telegram_account"></string>
 </resources>

@@ -167,10 +167,9 @@ class MainActivity : AppCompatActivity(), MainContract.View,ViewInterface, Navig
         bottomNavigation.setOnItemSelectedListener {selectedItem->
             when(selectedItem.itemId){
                 R.id.telegram -> {
-                    val telegramUsername = "JCarlosPG00"
-
+                    val telegramUsername = R.string.telegram_account
                     val telegramIntent = Intent(Intent.ACTION_VIEW)
-                    telegramIntent.data = Uri.parse("https://t.me/$telegramUsername")
+                    telegramIntent.data = Uri.parse("https://t.me/${telegramUsername}")
                     telegramIntent.setPackage("org.telegram.messenger")
                     try {
                         startActivity(telegramIntent)
@@ -179,7 +178,30 @@ class MainActivity : AppCompatActivity(), MainContract.View,ViewInterface, Navig
                     }
                     true
                 }
-
+                R.id.linkedin -> {
+                    val linkedinUsername = getString(R.string.linkedin_account)
+                    val linkedinIntent = Intent(Intent.ACTION_VIEW)
+                    linkedinIntent.data = Uri.parse("https://www.linkedin.com/in/$linkedinUsername")
+                    linkedinIntent.setPackage("com.linkedin.android")
+                    try {
+                        startActivity(linkedinIntent)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(this, "La aplicación de LinkedIn no está instalada", Toast.LENGTH_SHORT).show()
+                    }
+                    true
+                }
+                R.id.facebook -> {
+                    val facebookUsername = getString(R.string.facebook_account)
+                    val facebookIntent = Intent(Intent.ACTION_VIEW)
+                    facebookIntent.data = Uri.parse("https://www.facebook.com/$facebookUsername")
+                    facebookIntent.setPackage("com.facebook.katana")
+                    try {
+                        startActivity(facebookIntent)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(this, "La aplicación de Facebook no está instalada", Toast.LENGTH_SHORT).show()
+                    }
+                    true
+                }
                 else -> {false
                 }
             }

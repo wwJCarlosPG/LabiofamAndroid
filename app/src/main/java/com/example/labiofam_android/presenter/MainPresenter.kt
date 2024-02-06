@@ -11,7 +11,7 @@ class MainPresenter(mainView: MainContract.View,
     var result:MutableList<Bioproducts> = mutableListOf()
     override suspend fun getRandomBioproducts():MutableList<Bioproducts> {
             var response = mainModel.getRandomBioproducts()
-            if(response.isSuccessful){
+            if(response!=null && response.isSuccessful && response.body()!!.size>=3){
                 val bioproducts = response.body()
                 var random_index1 = Random.nextInt(bioproducts!!.size)
                 var random_index2 = Random.nextInt(bioproducts!!.size)

@@ -16,4 +16,11 @@
     <string name="facebook_account">JCarlosPG00</string>
     <string name="linkedin_account"></string>
     <string name="telegram_account"></string>
+    <string name="Biofertilizantes">Biofertilizantes</string>
+    <string name="Bioplaguicidas">Bioplaguicidas</string>
+    <string name="Biolarvicidas">Biolarvicidas</string>
+    <string name="Bioestimulantes">Bioestimulantes</string>
+    <string name="Biofuncidas">Biofungicidas</string>
+
+
 </resources>

@@ -17,7 +17,7 @@ class ContactsViewHolder (view: View) : RecyclerView.ViewHolder(view){
 
     fun render(contact: Contact){
         contact_name.text = contact.name
-        contact_info.text = contact.info
+        contact_info.text = contact.phone
         contact_occupation.text = contact.occupation
         Glide.with(contact_photo.context).load(contact.image).into(contact_photo)
 

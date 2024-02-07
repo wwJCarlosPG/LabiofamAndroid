@@ -17,10 +17,6 @@ class MainPresenter(mainView: MainContract.View,
                 var random_index2 = Random.nextInt(bioproducts!!.size)
                 var random_index3 = Random.nextInt(bioproducts!!.size)
                 result= mutableListOf(bioproducts[random_index1], bioproducts[random_index2], bioproducts[random_index3])
-                return (result)
-            }
-            else{
-                mainView.showError("No hay bioproductos que mostrar")
             }
         return result
     }

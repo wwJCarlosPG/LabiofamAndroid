@@ -309,11 +309,11 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
                             }
                         }
                     } else {
-                        showError("Error de conexión")
+                        showError("No hay puntos de ventas que mostrar")
                     }
                 }
-                catch (ex: SSLHandshakeException){
-                    //showError("Error de conexión")
+                catch (ex:Exception){
+                    showError("Error de conexión")
                 }
 
             }

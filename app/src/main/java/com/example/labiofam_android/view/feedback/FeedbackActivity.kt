@@ -56,9 +56,11 @@ class FeedbackActivity: ViewInterface,AppCompatActivity(),FeedbackContract.Feedb
     }
 
     override fun showError(message: String) {
-        Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
-    }
+        runOnUiThread{
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
 
+    }
 
     override fun initUI() {
 

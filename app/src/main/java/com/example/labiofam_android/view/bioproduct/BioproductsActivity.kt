@@ -155,12 +155,18 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
      override fun initUI() {
         search_bioproducts = findViewById(R.id.search_bioproducts)
         lifecycleScope.launch(Dispatchers.IO) {
-            bioproducts = bioproduct_presenter.getBioproducts()
-            if(bioproducts.isNotEmpty()) {
-                showBioproducts(bioproducts)
-            }else{
+            try {
+                bioproducts = bioproduct_presenter.getBioproducts()
+                if(bioproducts.isNotEmpty()) {
+                    showBioproducts(bioproducts)
+                }else{
+                    showError("No hay bioproductos que mostrar")
+                }
+            }
+            catch(ex: Exception){
                 showError("Error de conexión")
             }
+
 
         }
 
@@ -168,7 +174,10 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
 
 
     override fun showError(message: String) {
-        Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
+        runOnUiThread{
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun updateBioproductsCategories(position: Int){
@@ -198,6 +207,8 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
     }
 
     private fun navigateToBioproductDialog(bioproduct: Bioproducts) {
+        //poner todas estas instancias en initComponents
+        //este metodo esta malisimo, hay que refactorizar.
         try {
             val dialog = Dialog(this)
             dialog.setContentView(R.layout.dialog_bioproduct)

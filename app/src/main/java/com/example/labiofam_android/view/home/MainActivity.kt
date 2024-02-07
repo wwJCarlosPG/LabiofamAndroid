@@ -135,9 +135,10 @@ class MainActivity : AppCompatActivity(), MainContract.View,ViewInterface, Navig
 
         lifecycleScope.launch(Dispatchers.IO){
             try {
+                var x = 0
                 bioproducts = main_presenter.getRandomBioproducts()
                 if(bioproducts!= null && bioproducts.isNotEmpty() && bioproducts.size == 3){
-                    var x = 0
+
                     showRandomBioproducts(bioproducts)
                 }
                 else{
@@ -145,8 +146,8 @@ class MainActivity : AppCompatActivity(), MainContract.View,ViewInterface, Navig
                 }
 
             }
-            catch (ex:SSLHandshakeException){
-                Log.d("jc","sdadasjfa")
+            catch (ex:Exception){
+                showError("Error de conexion con el servidor")
             }
 
         }
@@ -223,8 +224,10 @@ class MainActivity : AppCompatActivity(), MainContract.View,ViewInterface, Navig
         }
     }
     override fun showError(message: String) {
-        //Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
-    }
+        runOnUiThread{
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
 
+    }
 
 }

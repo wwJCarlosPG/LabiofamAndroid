@@ -22,16 +22,25 @@ import com.example.labiofam_android.contract.BioproductContract
 import com.example.labiofam_android.model.BioproductModel
 import com.example.labiofam_android.presenter.BioproductPresenter
 import com.example.labiofam_android.view_interface.ViewInterface
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContract.BioproductView {
 
+
+
     private val bioproductCategories = listOf(
-        BioproductsCategories.Other,
-        BioproductsCategories.Agricola,
-        BioproductsCategories.Epidemias
+
+        BioproductsCategories.Bioestimulantes,
+        BioproductsCategories.Biolarvicidas,
+        BioproductsCategories.Bioplagicidas,
+        BioproductsCategories.Biofertilizantes,
+        BioproductsCategories.Biofungicidas
     )
+
 
     private var bioproducts = listOf<Bioproducts>()
 
@@ -52,6 +61,8 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
 
 
     override fun initComponents(){
+
+        //buscar una forma de hacer esto
         bioproducts_categories_rv = findViewById(R.id.bioproducts_categories_rv)
         bioproducts_rv = findViewById(R.id.bioproducts_rv)
         val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
@@ -144,12 +155,18 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
      override fun initUI() {
         search_bioproducts = findViewById(R.id.search_bioproducts)
         lifecycleScope.launch(Dispatchers.IO) {
-            bioproducts = bioproduct_presenter.getBioproducts()
-            if(bioproducts.isNotEmpty()) {
-                showBioproducts(bioproducts)
-            }else{
+            try {
+                bioproducts = bioproduct_presenter.getBioproducts()
+                if(bioproducts.isNotEmpty()) {
+                    showBioproducts(bioproducts)
+                }else{
+                    showError("No hay bioproductos que mostrar")
+                }
+            }
+            catch(ex: Exception){
                 showError("Error de conexión")
             }
+
 
         }
 
@@ -157,40 +174,93 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
 
 
     override fun showError(message: String) {
-        Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
+        runOnUiThread{
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun updateBioproductsCategories(position: Int){
+        for (i in bioproductCategories.indices){
+            if(bioproductCategories[i].isSelected && position!=i){
+                return
+            }
+        }
         bioproductCategories[position].isSelected = !bioproductCategories[position].isSelected
         bioproductsCategoriesAdapter.notifyItemChanged(position)
         updateBioproducts()
     }
 
     private fun updateBioproducts(){
-        val selectedBioproductsCategories: List<BioproductsCategories> = bioproductCategories.filter { it.isSelected }
-        //val newBioproducts = bioproducts.filter { selectedBioproductsCategories.contains(it.type) }
-        //bioproductsAdapter.bioproducts = newBioproducts
-        //bioproductsAdapter.notifyDataSetChanged()
+        val selectedBioproductsCategories: BioproductsCategories? = bioproductCategories.firstOrNull{ it.isSelected}
+        if(selectedBioproductsCategories == null){
+            val newBioproducts = bioproducts
+            bioproductsAdapter.bioproducts = newBioproducts
+            bioproductsAdapter.notifyDataSetChanged()
+        }
+        else{
+            val newBioproducts = bioproducts.filter { selectedBioproductsCategories.toString()==it.type_of_product }
+            bioproductsAdapter.bioproducts = newBioproducts
+            bioproductsAdapter.notifyDataSetChanged()
+        }
+
     }
 
     private fun navigateToBioproductDialog(bioproduct: Bioproducts) {
+        //poner todas estas instancias en initComponents
+        //este metodo esta malisimo, hay que refactorizar.
         try {
             val dialog = Dialog(this)
             dialog.setContentView(R.layout.dialog_bioproduct)
+            var bioproduct_description_title:TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_descriptiont_tv)
+            var bioproduct_advantages_title:TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_advantagest_tv)
+            var bioproduct_sum_title:TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_sumt_tv)
+            var bioproduct_sum:TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_sum_tv)
 
-            var bioproduct_dialog_name_tv: TextView =
-                dialog.findViewById(R.id.bioproduct_dialog_name_tv)
-            var bioproduct_dialog_summary_tv: TextView =
-                dialog.findViewById(R.id.bioproduct_dialog_summary_tv)
-            var bioproduct_dialog_description_tv: TextView =
-                dialog.findViewById(R.id.bioproduct_dialog_description_tv)
-            var bioproduct_dialog_iv: ImageView = dialog.findViewById(R.id.bioproduct_dialog_iv)
             var bioproduct_dialog_back_buttom: ImageView =
                 dialog.findViewById((R.id.bioproduct_dialog_back_buttom))
 
-            bioproduct_dialog_name_tv.text = bioproduct.name.toString()
-            bioproduct_dialog_description_tv.text = bioproduct.specifications
-            bioproduct_dialog_summary_tv.text = bioproduct.summary
+            var bioproduct_dialog_name_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_name_tv)
+            var bioproduct_dialog_advantages_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_advantages_tv)
+            var bioproduct_dialog_description_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_description_tv)
+            var bioproduct_dialog_iv: ImageView = dialog.findViewById(R.id.bioproduct_dialog_iv)
+
+            var bioproduct_diseases_title_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_diseasest_tv)
+            var bioproduct_dialog_diseases_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_diseases_tv)
+
+            if(bioproduct.diseases!=null){
+                bioproduct_dialog_diseases_tv.text = bioproduct.diseases
+                bioproduct_diseases_title_tv.text = "Enfermedades:"
+            }
+            if(bioproduct.description!=null) {
+                bioproduct_dialog_description_tv.text = bioproduct.description
+                bioproduct_description_title.text = "Descripcion:"
+            }
+            if(bioproduct.advantages!=null){
+                bioproduct_advantages_title.text = "Ventajas:"
+                bioproduct_dialog_advantages_tv.text = bioproduct.advantages
+            }
+            if(bioproduct.summary.size()>0){
+                bioproduct_sum_title.text = "Otras especifiaciones"
+                val jsonObject: JsonObject = bioproduct.summary
+                val gson: Gson = GsonBuilder().setPrettyPrinting().create()
+                val jsonString: String = gson.toJson(jsonObject)
+                var result = jsonString.replace("\"","").replace("{","").replace("}","")
+                bioproduct_sum.text = result
+
+            }
+
+            bioproduct_dialog_name_tv.text = bioproduct.name
+
             Glide.with(bioproduct_dialog_iv.context).load(bioproduct.image)
                 .into(bioproduct_dialog_iv)
 

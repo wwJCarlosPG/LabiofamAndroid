@@ -50,21 +50,27 @@ class ContactsViewActivity : ViewInterface,AppCompatActivity(), ContactContract.
     }
 
     override fun showError(message: String) {
-        Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun initUI() {
-        var contacts:List<Contact> = listOf()
-        lifecycleScope.launch(Dispatchers.IO) {
-            contacts = contact_presenter.getContacts()
-            if(contacts.isNotEmpty()){
-                showContacts(contacts)
-            }
-            else{
-                showError("Error de conexión")
-            }
+        runOnUiThread{
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
 
+    }
+    override fun initUI() {
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            var contacts: List<Contact> = listOf()
+            try {
+                var x = 0
+                contacts = contact_presenter.getContacts()
+                if (contacts.isNotEmpty()) {
+                    showContacts(contacts)
+                } else {
+                    showError("No hay contactos que mostrar.")
+                }
+            } catch (ex: Exception) {
+                showError("Error de conexion con el servidor")
+            }
+        }
     }
 
 

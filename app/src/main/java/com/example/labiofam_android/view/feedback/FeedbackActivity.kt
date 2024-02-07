@@ -56,9 +56,11 @@ class FeedbackActivity: ViewInterface,AppCompatActivity(),FeedbackContract.Feedb
     }
 
     override fun showError(message: String) {
-        Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
-    }
+        runOnUiThread{
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
 
+    }
 
     override fun initUI() {
 
@@ -73,9 +75,10 @@ class FeedbackActivity: ViewInterface,AppCompatActivity(),FeedbackContract.Feedb
                     showToast("No salga de la vista, espere unos segundos...")
                     delay(7000)
                     var response = feedback_presenter.sendMail(
-                        "Quejas y Suegerencias",
-                        "Mensaje: ${editText_message.text}, Nombre: ${editText_name.text}, " +
-                          "Telefono: ${editText_phone.text}, Correo: ${editText_mail.text}"
+                        editText_name.text.toString(),
+                        editText_mail.text.toString()+" "+ editText_phone,
+                        "Quejas y sugerencias",
+                        editText_message.text.toString()
                     )
                     showToast(response)
 

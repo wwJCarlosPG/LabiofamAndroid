@@ -42,6 +42,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.net.ssl.SSLHandshakeException
 
 class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,BioproductToSellPointContract.BioproductToSellPointView, SellPointToBioproductContract.SellPointToBioproductView, OnMapReadyCallback, OnMarkerClickListener, InfoWindowAdapter {
     private lateinit var mGoogleMap: GoogleMap
@@ -132,7 +133,7 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
     }
 
     override fun showError(message: String) {
-        Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
+       // Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
     }
 
 
@@ -271,7 +272,7 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
         }
         }
         catch (e:Exception){
-            showError("Error de conexión")
+            //showError("Error de conexión")
         }
         return true
     }
@@ -294,22 +295,26 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
         mGoogleMap!!.moveCamera(CameraUpdateFactory.newLatLng(initialPosition))
         mGoogleMap!!.animateCamera(CameraUpdateFactory.zoomTo(5.0f))
         lifecycleScope.launch(Dispatchers.IO){
-                val sellPoints = map_presenter.getSellPoints()
-                if(sellPoints.isNotEmpty()){
-                    runOnUiThread{
-                        sellPoints.forEach{
-                                sp->
-                            val location = LatLng(sp.latitude, sp.longitude)
-                            mGoogleMap.addMarker(MarkerOptions()
-                                .position(location))
+                try {
+                    val sellPoints = map_presenter.getSellPoints()
+                    if (sellPoints.isNotEmpty()) {
+                        runOnUiThread {
+                            sellPoints.forEach { sp ->
+                                val location = LatLng(sp.latitude, sp.longitude)
+                                mGoogleMap.addMarker(
+                                    MarkerOptions()
+                                        .position(location)
+                                )
 
+                            }
                         }
+                    } else {
+                        showError("No hay puntos de ventas que mostrar")
                     }
                 }
-            else{
-                showError("Error de conexión")
-            }
-
+                catch (ex:Exception){
+                    showError("Error de conexión")
+                }
 
             }
 
@@ -340,8 +345,8 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
                 dialog.findViewById((R.id.bioproduct_dialog_back_buttom))
 
             bioproduct_dialog_name_tv.text = bioproduct.name.toString()
-            bioproduct_dialog_description_tv.text = bioproduct.specifications
-            bioproduct_dialog_summary_tv.text = bioproduct.summary
+            bioproduct_dialog_description_tv.text = bioproduct.description
+            //bioproduct_dialog_summary_tv.text = bioproduct.summary
             Glide.with(bioproduct_dialog_iv.context).load(bioproduct.image)
                 .into(bioproduct_dialog_iv)
 

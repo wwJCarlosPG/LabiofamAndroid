@@ -35,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bioproduct_iv"
             tools:text="Polvito Blanco"
-            android:fontFamily="@font/telex"
+            android:fontFamily="@font/cambay"
             android:textSize="16sp">
 
         </TextView>
@@ -50,7 +50,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bioproduct_name_tv"
             tools:text="Polvito Blanco"
-            android:fontFamily="@font/telex"
+            android:fontFamily="@font/cambay"
             android:textSize="16sp">
 
         </TextView>

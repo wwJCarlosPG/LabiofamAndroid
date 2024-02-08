@@ -225,9 +225,11 @@ class MainActivity : AppCompatActivity(), MainContract.View,ViewInterface, Navig
     }
     override fun showError(message: String) {
         runOnUiThread{
+
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             }
 
     }
+
 
 }

@@ -131,9 +131,11 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
         })
 
     }
-
     override fun showError(message: String) {
-       // Toast.makeText(this, "${message}", Toast.LENGTH_SHORT).show()
+        runOnUiThread{
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
+
     }
 
 
@@ -272,7 +274,7 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
         }
         }
         catch (e:Exception){
-            //showError("Error de conexión")
+            showError("Error de conexión")
         }
         return true
     }

@@ -1,6 +1,8 @@
 package com.example.labiofam_android.apiServices
 
+import com.google.gson.JsonObject
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
@@ -16,4 +18,10 @@ interface FeedbackService {
         @Field("subject") subject: String,
         @Field("message") message: String
     ): Response<Unit>
+
+    @POST("Registration/login")
+    suspend fun logIn(@Body request:JsonObject)
+
+
+
 }

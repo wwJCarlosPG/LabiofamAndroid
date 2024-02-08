@@ -11,5 +11,6 @@
     <color name="itemToCheck">#447A9C</color>
     <color name="itemToSelected">#A7DADC</color>
     <color name="labiofamColor">#2f4e9b</color>
+    <color name="linkColor">#22b0ff</color>
 
 </resources>

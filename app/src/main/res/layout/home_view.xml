@@ -11,17 +11,15 @@
         android:id="@+id/best_sales_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
         android:fontFamily="@font/telex"
         android:text="PRODUCTOS + VENDIDOS"
         android:textColor="@color/labiofamColor"
         android:textSize="14dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/random_iv2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/second_title_iv"
-        app:layout_constraintVertical_bias="0.103" />
+        app:layout_constraintTop_toBottomOf="@+id/second_title_iv" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_bottom_menu"
@@ -48,54 +46,46 @@
 
     <ImageView
         android:id="@+id/second_title_iv"
-        android:layout_width="match_parent"
-        android:layout_height="221dp"
+        android:layout_width="341dp"
+        android:layout_height="168dp"
         android:src="@drawable/second2"
-        app:layout_constraintBottom_toTopOf="@+id/random_product_iv2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_iv"
-        app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/random_iv1"
         android:layout_width="88dp"
         android:layout_height="95dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginTop="4dp"
         android:src="@drawable/ic_launcher_background"
-        app:layout_constraintBottom_toTopOf="@+id/nav_bottom_menu"
         app:layout_constraintEnd_toStartOf="@+id/random_iv2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/best_sales_tv"
-        app:layout_constraintVertical_bias="0.038"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/random_iv2"
         android:layout_width="88dp"
         android:layout_height="95dp"
+        android:layout_marginTop="4dp"
         android:src="@drawable/ic_launcher_background"
-        app:layout_constraintBottom_toTopOf="@+id/nav_bottom_menu"
         app:layout_constraintEnd_toStartOf="@id/random_iv3"
         app:layout_constraintStart_toEndOf="@id/random_iv1"
-        app:layout_constraintTop_toBottomOf="@+id/best_sales_tv"
 
-        app:layout_constraintVertical_bias="0.657"
+        app:layout_constraintTop_toBottomOf="@+id/best_sales_tv"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/random_iv3"
         android:layout_width="88dp"
         android:layout_height="95dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginTop="4dp"
         android:src="@drawable/ic_launcher_background"
-        app:layout_constraintBottom_toTopOf="@+id/nav_bottom_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/random_iv2"
         app:layout_constraintTop_toBottomOf="@+id/best_sales_tv"
-        app:layout_constraintVertical_bias="0.076"
         tools:srcCompat="@tools:sample/avatars" />
 
 

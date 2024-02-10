@@ -3,6 +3,7 @@ package com.example.labiofam_android.presenter
 import com.example.labiofam_android.apiModel.Bioproducts
 import com.example.labiofam_android.contract.BioproductContract
 import com.example.labiofam_android.model.BioproductModel
+import com.google.gson.Gson
 
 class BioproductPresenter(bioproductView:BioproductContract.BioproductView,
 bioproductModel:BioproductModel):BioproductContract.BioproductPresenter {

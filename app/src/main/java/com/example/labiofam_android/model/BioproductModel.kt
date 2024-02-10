@@ -4,6 +4,7 @@ import com.example.labiofam_android.apiServices.BioproductService
 import com.example.labiofam_android.apiServices.RetrofitHelper
 import com.example.labiofam_android.apiModel.Bioproducts
 import com.example.labiofam_android.contract.BioproductContract
+import com.google.gson.Gson
 import retrofit2.Response
 
 class BioproductModel:BioproductContract.BioproductModel {
@@ -15,5 +16,6 @@ class BioproductModel:BioproductContract.BioproductModel {
     override suspend fun getBioproductsBySubstring(substring: String): Response<List<Bioproducts>> {
         return bioproduct_service.getBySubstring(substring)
     }
+
 
 }

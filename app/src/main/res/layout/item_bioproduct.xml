@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bioproduct_cv"
     android:layout_width="180dp"
-    android:layout_height="220dp"
+    android:layout_height="250dp"
     app:cardBackgroundColor="@color/white"
     android:layout_marginVertical="2dp"
     android:layout_marginHorizontal="2dp"
@@ -12,7 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="180dp"
-        android:layout_height="220dp">
+        android:layout_height="250dp">
 
         <ImageView
             android:id="@+id/bioproduct_iv"
@@ -35,7 +35,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bioproduct_iv"
             tools:text="Polvito Blanco"
-            android:fontFamily="@font/telex"
+            android:fontFamily="@font/cambay"
+            android:textSize="16sp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/bioproduct_price_tv"
+            android:layout_width="180dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="3dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bioproduct_name_tv"
+            tools:text="Polvito Blanco"
+            android:fontFamily="@font/cambay"
             android:textSize="16sp">
 
         </TextView>

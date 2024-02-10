@@ -38,6 +38,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -335,20 +338,55 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
         try {
             val dialog = Dialog(this)
             dialog.setContentView(R.layout.dialog_bioproduct)
+            var bioproduct_description_title:TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_descriptiont_tv)
+            var bioproduct_advantages_title:TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_advantagest_tv)
+            var bioproduct_sum_title:TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_sumt_tv)
+            var bioproduct_sum:TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_sum_tv)
 
-            var bioproduct_dialog_name_tv: TextView =
-                dialog.findViewById(R.id.bioproduct_dialog_name_tv)
-            var bioproduct_dialog_summary_tv: TextView =
-                dialog.findViewById(R.id.bioproduct_dialog_summary_tv)
-            var bioproduct_dialog_description_tv: TextView =
-                dialog.findViewById(R.id.bioproduct_dialog_description_tv)
-            var bioproduct_dialog_iv: ImageView = dialog.findViewById(R.id.bioproduct_dialog_iv)
             var bioproduct_dialog_back_buttom: ImageView =
                 dialog.findViewById((R.id.bioproduct_dialog_back_buttom))
 
-            bioproduct_dialog_name_tv.text = bioproduct.name.toString()
-            bioproduct_dialog_description_tv.text = bioproduct.description
-            //bioproduct_dialog_summary_tv.text = bioproduct.summary
+            var bioproduct_dialog_name_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_name_tv)
+            var bioproduct_dialog_advantages_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_advantages_tv)
+            var bioproduct_dialog_description_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_description_tv)
+            var bioproduct_dialog_iv: ImageView = dialog.findViewById(R.id.bioproduct_dialog_iv)
+
+            var bioproduct_diseases_title_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_diseasest_tv)
+            var bioproduct_dialog_diseases_tv: TextView =
+                dialog.findViewById(R.id.bioproduct_dialog_diseases_tv)
+
+            if(bioproduct.diseases!=null){
+                bioproduct_dialog_diseases_tv.text = bioproduct.diseases
+                bioproduct_diseases_title_tv.text = "Enfermedades:"
+            }
+            if(bioproduct.description!=null) {
+                bioproduct_dialog_description_tv.text = bioproduct.description
+                bioproduct_description_title.text = "Descripcion:"
+            }
+            if(bioproduct.advantages!=null){
+                bioproduct_advantages_title.text = "Ventajas:"
+                bioproduct_dialog_advantages_tv.text = bioproduct.advantages
+            }
+            if(bioproduct.summary.size()>0){
+                bioproduct_sum_title.text = "Otras especifiaciones"
+                val jsonObject: JsonObject = bioproduct.summary
+                val gson: Gson = GsonBuilder().setPrettyPrinting().create()
+                val jsonString: String = gson.toJson(jsonObject)
+                var result = jsonString.replace("\"","").replace("{","").replace("}","")
+                bioproduct_sum.text = result
+
+            }
+
+            bioproduct_dialog_name_tv.text = bioproduct.name
+
             Glide.with(bioproduct_dialog_iv.context).load(bioproduct.image)
                 .into(bioproduct_dialog_iv)
 
@@ -360,4 +398,5 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
             showError("Error de conexión")
         }
     }
+
 }

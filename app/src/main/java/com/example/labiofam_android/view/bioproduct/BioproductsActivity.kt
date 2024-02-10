@@ -207,8 +207,6 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
     }
 
     private fun navigateToBioproductDialog(bioproduct: Bioproducts) {
-        //poner todas estas instancias en initComponents
-        //este metodo esta malisimo, hay que refactorizar.
         try {
             val dialog = Dialog(this)
             dialog.setContentView(R.layout.dialog_bioproduct)

@@ -30,28 +30,9 @@ class BioproductsCategoriesViewHolder(view: View) : RecyclerView.ViewHolder(view
         )
 
         itemView.setOnClickListener { onItemSelected(layoutPosition) }
+        var i = 0
+        tv_bioproductCategoryName.text = bioproductCategory.name
 
-        when (bioproductCategory) {
-            BioproductsCategories.Biofungicidas -> {
-                tv_bioproductCategoryName.text = "Biofungicidas"
-            }
-
-            BioproductsCategories.Bioestimulantes -> {
-                tv_bioproductCategoryName.text = "Bioestimulantes"
-            }
-
-            BioproductsCategories.Biofertilizantes -> {
-                tv_bioproductCategoryName.text = "Biofertilizantes"
-            }
-            BioproductsCategories.Biolarvicidas -> {
-                tv_bioproductCategoryName.text = "Biolarvicidas"
-            }
-            BioproductsCategories.Bioplagicidas -> {
-                tv_bioproductCategoryName.text = "Bioplagicidas"
-            }
-
-
-        }
 
 
     }

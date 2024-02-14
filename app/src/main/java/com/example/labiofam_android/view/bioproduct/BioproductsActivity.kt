@@ -32,15 +32,15 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
 
 
 
-    private val bioproductCategories = listOf(
+    /*private val bioproductCategories = listOf(
 
         BioproductsCategories.Bioestimulantes,
         BioproductsCategories.Biolarvicidas,
         BioproductsCategories.Bioplagicidas,
         BioproductsCategories.Biofertilizantes,
         BioproductsCategories.Biofungicidas
-    )
-
+    )*/
+    private var bioproductCategories:List<BioproductsCategories> = listOf()
 
     private var bioproducts = listOf<Bioproducts>()
 
@@ -62,7 +62,6 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
 
     override fun initComponents(){
 
-        //buscar una forma de hacer esto
         bioproducts_categories_rv = findViewById(R.id.bioproducts_categories_rv)
         bioproducts_rv = findViewById(R.id.bioproducts_rv)
         val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
@@ -158,7 +157,9 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
             try {
                 bioproducts = bioproduct_presenter.getBioproducts()
                 if(bioproducts.isNotEmpty()) {
-                    showBioproducts(bioproducts)
+                    bioproductCategories = bioproduct_presenter.getCategories(bioproducts)
+                    Log.d("jc",bioproductCategories.size.toString())
+                    showBioproducts(bioproducts,bioproductCategories)
                 }else{
                     showError("No hay bioproductos que mostrar")
                 }
@@ -271,7 +272,7 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
         }
     }
 
-    override fun showBioproducts(bioproducts: List<Bioproducts>) {
+    override fun showBioproducts(bioproducts: List<Bioproducts>,bioproductCategories:List<BioproductsCategories> ) {
         runOnUiThread {
             bioproductsCategoriesAdapter = BioproductsCategoriesAdapter(bioproductCategories) { position -> updateBioproductsCategories(position) }
             bioproducts_categories_rv.layoutManager = LinearLayoutManager(this@BioproductsActivity, LinearLayoutManager.HORIZONTAL, false)

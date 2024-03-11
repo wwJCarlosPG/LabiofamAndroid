@@ -1,8 +1,6 @@
 package com.example.labiofam_android.view.map
 
 import android.app.Dialog
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -29,15 +27,6 @@ import com.example.labiofam_android.presenter.BioproductToSellPointPresenter
 import com.example.labiofam_android.presenter.MapPresenter
 import com.example.labiofam_android.presenter.SellPointToBioproductPresenter
 import com.example.labiofam_android.view_interface.ViewInterface
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -47,8 +36,22 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.net.ssl.SSLHandshakeException
 
-class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,BioproductToSellPointContract.BioproductToSellPointView, SellPointToBioproductContract.SellPointToBioproductView, OnMapReadyCallback, OnMarkerClickListener, InfoWindowAdapter {
-    private lateinit var mGoogleMap: GoogleMap
+import android.os.Bundle
+import android.view.LayoutInflater
+import androidx.appcompat.app.AppCompatActivity
+import com.mapbox.mapboxsdk.Mapbox
+import com.mapbox.mapboxsdk.annotations.Marker
+import com.mapbox.mapboxsdk.annotations.MarkerOptions
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
+import com.mapbox.mapboxsdk.maps.SupportMapFragment
+
+class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,BioproductToSellPointContract.BioproductToSellPointView, SellPointToBioproductContract.SellPointToBioproductView
+{
+    // Declare a variable for MapView
     private lateinit var searchView:SearchView
     private lateinit var toolbar:Toolbar
     val map_model:MapContract.MapModel = MapModel()
@@ -59,15 +62,27 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
     val bioproductToSellpoint_presenter = BioproductToSellPointPresenter(this@MapActivity,bioproductToSellPoint_model)
     private lateinit var checkBoxAddress:CheckBox
     private lateinit var checkBoxBiop:CheckBox
+    val key = "lypgVGvwohDCETMJ0WxP"
+    val mapId = "streets-v2"
+    private val style_url = "https://api.maptiler.com/maps/$mapId/style.json?key=$key"
+    private lateinit var  map_box:MapboxMap
+    private lateinit var map:MapView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
-
+        Mapbox.getInstance(this)
+        val inflater = LayoutInflater.from(this)
+        val root_view = inflater.inflate(R.layout.activity_map, null)
+        setContentView(root_view)
+        map = root_view.findViewById(R.id.mapFragment)
         initComponents()
         initUI()
+
     }
 
-    override fun initUI(){
+
+    override fun initUI() {
         checkBoxBiop.isChecked = true
         checkBoxAddress.isChecked = false
         checkBoxBiop.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -82,7 +97,7 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
     }
 
 
-    override fun initComponents(){
+    override fun initComponents() {
         searchView = findViewById(R.id.search_map)
         toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
@@ -91,14 +106,47 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
-
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment)
-                as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        map.getMapAsync { map_ ->
+            map_box = map_
+            map_.setStyle(style_url)
+            map_.cameraPosition = CameraPosition.Builder().target(
+                com.mapbox.mapboxsdk.geometry.LatLng(
+                    21.5218, -77.7812
+                )
+            ).zoom(5.0).build()
+            lifecycleScope.launch(Dispatchers.IO){
+                try {
+                    val sellPoints = map_presenter.getSellPoints()
+                    if (sellPoints.isNotEmpty()) {
+                        runOnUiThread {
+                            sellPoints.forEach { sp ->
+                                val location = LatLng(sp.latitude, sp.longitude)
+                                map_.addMarker(
+                                    MarkerOptions()
+                                        .position(location)
+                                )
 
+                            }
+                        }
+                    } else {
+                        showError("No hay puntos de ventas que mostrar")
+                    }
+                }
+                catch (ex:Exception){
+                    showError("Error de conexión")
+                }
+
+            }
+
+            map_.setOnMarkerClickListener { marker ->
+                onMarkerClick(marker)
+                true
+            }
+
+        }
         searchView!!.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
             override fun onQueryTextChange(newText: String?): Boolean {
                 var query = newText.toString()
@@ -122,26 +170,17 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
                     getAllSellPointsAddress()
                 }
                 else{
-                        if(!checkBoxBiop.isChecked) {
-                            getBySubstringAddress(query)
-                        }
-                        else{
-                            getBySubstringByBioproduct(query)
-                        }
+                    if(!checkBoxBiop.isChecked) {
+                        getBySubstringAddress(query)
+                    }
+                    else{
+                        getBySubstringByBioproduct(query)
+                    }
                 }
                 return true
             }
         })
-
     }
-    override fun showError(message: String) {
-        runOnUiThread{
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        }
-
-    }
-
-
     fun getAllSellPointsAddress(){
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -149,23 +188,24 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
             if(sellPoints_response.isNotEmpty()){
                 var sellpoints = sellPoints_response
                 runOnUiThread{
-                    mGoogleMap.clear()
+                    map_box.clear()
                 }
-                    sellpoints.forEach{
-                            item->
-                        val location = LatLng(item.latitude, item.longitude)
-                        runOnUiThread {
-                        mGoogleMap.addMarker(MarkerOptions()
-                            .position(location))
-                        }
-
+                sellpoints.forEach{
+                        item->
+                    val location = LatLng(item.latitude, item.longitude)
+                    runOnUiThread {
+                        val marker_options:MarkerOptions = MarkerOptions()
+                            .position(location)
+                        map_box.addMarker(marker_options)
                     }
+
+                }
 
 
             }
             else{
                 runOnUiThread{
-                    mGoogleMap.clear()
+                    map_box.clear()
                     showError("No se encuentra")
                 }
             }
@@ -173,167 +213,159 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
 
 
     }
+    override fun onStart() {
+        super.onStart()
+        map.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        map.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        map.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        map.onStop()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        map.onLowMemory()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        map.onDestroy()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        map.onSaveInstanceState(outState)
+    }
+
+
+
+    override fun showError(message: String) {
+        runOnUiThread{
+
+            Toast.makeText(this@MapActivity, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     fun getBySubstringByBioproduct(bioproduct: String){
         lifecycleScope.launch(Dispatchers.IO) {
             var sellPoint_by_biops = bioproductToSellpoint_presenter.getSellPointsByBiopSubstring(bioproduct)
             if(sellPoint_by_biops.isNotEmpty()){
                 runOnUiThread{
-                    mGoogleMap.clear()
+                    map_box.clear()
                 }
                 sellPoint_by_biops.forEach { item->
                     runOnUiThread{
-                        mGoogleMap.addMarker(MarkerOptions().position(LatLng(item.latitude, item.longitude)))
+                        map_box.addMarker(MarkerOptions().position(LatLng(item.latitude, item.longitude)))
                     }
                 }
             }
             else{
                 runOnUiThread{
-                    mGoogleMap.clear()
-                    showError("No se encuentra")
+                    map_box.clear()
+
                 }
+                Log.d("NO HAY POR SUBSTRING", "NO HAY")
+                showError("No se encuentra")
             }
         }
     }
     fun getBySubstringAddress(location:String){
         lifecycleScope.launch(Dispatchers.IO) {
+            var x = 0
             var sellPoints_by_address = map_presenter.getSellPointByAddress(location)
             if(sellPoints_by_address.isNotEmpty()){
                 runOnUiThread{
-                    mGoogleMap.clear()
+                    map_box.clear()
                 }
                 sellPoints_by_address.forEach { item->
                     runOnUiThread{
-                        mGoogleMap.addMarker(MarkerOptions().position(LatLng(item.latitude, item.longitude)))
+                        map_box.addMarker(MarkerOptions().position(LatLng(item.latitude, item.longitude)))
                     }
                 }
             }
             else{
-                runOnUiThread{
-                    mGoogleMap.clear()
-                    showError("No se encuentra")
+                runOnUiThread {
+                    map_box.clear()
                 }
+                Log.d("Entra a que no hay", "NO HAY")
+                showError("No se encuentra")
+
             }
         }
     }
-    override fun getInfoContents(marker: Marker):View?
-    {
-        return null
-    }
 
-    override fun onMarkerClick(marker: Marker): Boolean {
+    fun onMarkerClick(marker: Marker): Boolean {
         try{
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_point)
-        var latitude = marker.position.latitude
-        var longitude = marker.position.longitude
-        lifecycleScope.launch(Dispatchers.IO) {
-            var sellPoint = map_presenter.getByGeolocation(
-                latitude, longitude
-            )
-            var bioproductsBySellPoint = sellPointToBioproduct_presenter.getBioproductsBySellPoint(sellPoint.id)
-            withContext(Dispatchers.Main) {
-                initSellPointDialog(dialog, sellPoint)
-                var spinner: Spinner = dialog.findViewById(R.id.bioproducts_spinner)
-                var items = mutableListOf<String>()
-                items.add("Productos")
-                bioproductsBySellPoint.forEach{biop->
-                     items.add(biop.name)
-                }
-                val adapter = ArrayAdapter(
-                    this@MapActivity,
-                    android.R.layout.simple_spinner_item,
-                    items
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.dialog_point)
+            var latitude = marker.position.latitude
+            var longitude = marker.position.longitude
+            lifecycleScope.launch(Dispatchers.IO) {
+                var sellPoint = map_presenter.getByGeolocation(
+                    latitude, longitude
                 )
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinner.adapter = adapter
-                spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        p0: AdapterView<*>?,
-                        p1: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        val selectedItem = items[position]
-                        if (position != 0) {
-                            Toast.makeText(
-                                this@MapActivity,
-                                "$selectedItem",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                var selectedBioproduct = bioproductsBySellPoint.firstOrNull { it.name==selectedItem }//aqui busco un bioproducto por el nombre
-                                runOnUiThread {
-                                    navigateToBioproductDialog(selectedBioproduct!!)
+                var bioproductsBySellPoint = sellPointToBioproduct_presenter.getBioproductsBySellPoint(sellPoint.id)
+                withContext(Dispatchers.Main) {
+                    initSellPointDialog(dialog, sellPoint)
+                    var spinner: Spinner = dialog.findViewById(R.id.bioproducts_spinner)
+                    var items = mutableListOf<String>()
+                    items.add("Productos")
+                    bioproductsBySellPoint.forEach{biop->
+                        items.add(biop.name)
+                    }
+                    val adapter = ArrayAdapter(
+                        this@MapActivity,
+                        android.R.layout.simple_spinner_item,
+                        items
+                    )
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinner.adapter = adapter
+                    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            p0: AdapterView<*>?,
+                            p1: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            val selectedItem = items[position]
+                            if (position != 0) {
+                                Toast.makeText(
+                                    this@MapActivity,
+                                    "$selectedItem",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                lifecycleScope.launch(Dispatchers.IO) {
+                                    var selectedBioproduct = bioproductsBySellPoint.firstOrNull { it.name==selectedItem }//aqui busco un bioproducto por el nombre
+                                    runOnUiThread {
+                                        navigateToBioproductDialog(selectedBioproduct!!)
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                        override fun onNothingSelected(p0: AdapterView<*>?) {
+                        }
                     }
+                    dialog.show()
                 }
-                dialog.show()
             }
-        }
         }
         catch (e:Exception){
             showError("Error de conexión")
         }
         return true
     }
-    fun initSellPointDialog(dialog:Dialog, sellPoint:SellPoint){
-        var sellpoint_name_tv:TextView = dialog.findViewById(R.id.sellpoint_name_tv)
-        sellpoint_name_tv.text = sellPoint.name
-        var sellpoint_addrress_tv:TextView = dialog.findViewById(R.id.sellpoint_address)
-        sellpoint_addrress_tv.text = sellPoint.address
-        var sellpoint_province_tv:TextView = dialog.findViewById(R.id.sellpoint_province_tv)
-        sellpoint_province_tv.text = sellPoint.province
-        var sellpoint_municipality_tv:TextView = dialog.findViewById(R.id.sellpoint_municipality_tv)
-        sellpoint_municipality_tv.text = sellPoint.province
-    }
-    override fun onMapReady(googleMap: GoogleMap) {
-
-        mGoogleMap = googleMap
-        mGoogleMap?.setOnMarkerClickListener(this)
-        mGoogleMap?.setInfoWindowAdapter(this)
-        val initialPosition = LatLng(21.5218, -77.7812)
-        mGoogleMap!!.moveCamera(CameraUpdateFactory.newLatLng(initialPosition))
-        mGoogleMap!!.animateCamera(CameraUpdateFactory.zoomTo(5.0f))
-        lifecycleScope.launch(Dispatchers.IO){
-                try {
-                    val sellPoints = map_presenter.getSellPoints()
-                    if (sellPoints.isNotEmpty()) {
-                        runOnUiThread {
-                            sellPoints.forEach { sp ->
-                                val location = LatLng(sp.latitude, sp.longitude)
-                                mGoogleMap.addMarker(
-                                    MarkerOptions()
-                                        .position(location)
-                                )
-
-                            }
-                        }
-                    } else {
-                        showError("No hay puntos de ventas que mostrar")
-                    }
-                }
-                catch (ex:Exception){
-                    showError("Error de conexión")
-                }
-
-            }
-
-
-
-
-
-    }
-    override fun getInfoWindow(marker: Marker): View? {
-
-        return null
-
-    }
-
     private fun navigateToBioproductDialog(bioproduct: Bioproducts) {
         try {
             val dialog = Dialog(this)
@@ -398,5 +430,14 @@ class MapActivity : ViewInterface,AppCompatActivity(),MapContract.MapView,Biopro
             showError("Error de conexión")
         }
     }
-
+    fun initSellPointDialog(dialog:Dialog, sellPoint:SellPoint){
+        var sellpoint_name_tv:TextView = dialog.findViewById(R.id.sellpoint_name_tv)
+        sellpoint_name_tv.text = sellPoint.name
+        var sellpoint_addrress_tv:TextView = dialog.findViewById(R.id.sellpoint_address)
+        sellpoint_addrress_tv.text = sellPoint.address
+        var sellpoint_province_tv:TextView = dialog.findViewById(R.id.sellpoint_province_tv)
+        sellpoint_province_tv.text = sellPoint.province
+        var sellpoint_municipality_tv:TextView = dialog.findViewById(R.id.sellpoint_municipality_tv)
+        sellpoint_municipality_tv.text = sellPoint.province
+    }
 }

@@ -74,7 +74,18 @@
         app:layout_constraintTop_toBottomOf="@+id/search_map"
         tools:ignore="UnknownId" />
 
-    <androidx.fragment.app.FragmentContainerView
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_address">
+
+    </com.mapbox.mapboxsdk.maps.MapView>
+    <!--<androidx.fragment.app.FragmentContainerView
         android:id="@+id/mapFragment"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
@@ -87,6 +98,6 @@
         app:layout_constraintTop_toBottomOf="@+id/checkBox_address"
         tools:ignore="UnknownId"></androidx.fragment.app.FragmentContainerView>
 
-
+-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

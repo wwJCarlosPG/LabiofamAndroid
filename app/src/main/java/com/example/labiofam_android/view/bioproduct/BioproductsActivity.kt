@@ -176,7 +176,7 @@ class BioproductsActivity : ViewInterface, AppCompatActivity(), BioproductContra
 
     override fun showError(message: String) {
         runOnUiThread{
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@BioproductsActivity, message, Toast.LENGTH_SHORT).show()
         }
 
     }
